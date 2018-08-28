@@ -10,3 +10,7 @@ Template projects for base code for EGP 410 assignments.
    * steering
 
 Building instructions are left up to the student. 
+
+
+These are the changes made by RJ Bourdelais. 
+ * Made the Black Arrow face toward the player always.
