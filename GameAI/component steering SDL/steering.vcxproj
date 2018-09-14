@@ -54,7 +54,9 @@
     <ClCompile Include="GraphicsBufferManager.cpp" />
     <ClCompile Include="GraphicsSystem.cpp" />
     <ClCompile Include="InputSystem.cpp" />
+    <ClCompile Include="KeyboardMessage.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MouseMessage.cpp" />
     <ClCompile Include="PhysicsComponent.cpp" />
     <ClCompile Include="PlayerMoveToMessage.cpp" />
     <ClCompile Include="PositionComponent.cpp" />

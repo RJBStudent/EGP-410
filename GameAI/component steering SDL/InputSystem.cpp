@@ -2,6 +2,7 @@
 #include "GameMessageManager.h"
 #include "defines.h"
 #include "Game.h"
+#include "KeyboardMessage.h"
 
 
 InputSystem::InputSystem()
@@ -40,13 +41,13 @@ void InputSystem::update()
 		if (mBitwiseKeyStates[i] || 0x0)
 		{
 			//EventSystem::getInstance()->fireEvent(KeyEvent(mBitwiseKeyStates[i], KeyCode(i)));
-			GameMessage* pMessage = new PlayerMoveToMessage(pos);
+			GameMessage* pMessage = new KeyboardMessage(mBitwiseKeyStates[i], KeyCode(i));
 			MESSAGE_MANAGER->addMessage(pMessage, 0);
 		}
 
 	}
-	EventSystem::getInstance()->fireEvent(MouseKeyEvent(mRightMouse, mLeftMouse, mMouseLocation));
 
+	//EventSystem::getInstance()->fireEvent(MouseKeyEvent(mRightMouse, mLeftMouse, mMouseLocation));
 
 }
 
