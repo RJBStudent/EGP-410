@@ -70,10 +70,13 @@
     <ClCompile Include="InputSystem.cpp">
       <Filter>Source Files\Messaging</Filter>
     </ClCompile>
-    <ClCompile Include="KeyboardMessage.cpp">
+    <ClCompile Include="AddRandomUnitMessage.cpp">
       <Filter>Source Files\Messaging</Filter>
     </ClCompile>
-    <ClCompile Include="MouseMessage.cpp">
+    <ClCompile Include="CloseMessage.cpp">
+      <Filter>Source Files\Messaging</Filter>
+    </ClCompile>
+    <ClCompile Include="DeleteRandomUnitMessage.cpp">
       <Filter>Source Files\Messaging</Filter>
     </ClCompile>
   </ItemGroup>
@@ -162,10 +165,13 @@
     <ClInclude Include="KeyboardInputs.h">
       <Filter>Header Files\Util</Filter>
     </ClInclude>
-    <ClInclude Include="MouseMessage.h">
+    <ClInclude Include="AddRandomUnitMessage.h">
       <Filter>Header Files\Messaging</Filter>
     </ClInclude>
-    <ClInclude Include="KeyboardMessage.h">
+    <ClInclude Include="DeleteRandomUnitMessage.h">
+      <Filter>Header Files\Messaging</Filter>
+    </ClInclude>
+    <ClInclude Include="CloseMessage.h">
       <Filter>Header Files\Messaging</Filter>
     </ClInclude>
   </ItemGroup>

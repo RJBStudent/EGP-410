@@ -2,8 +2,10 @@
 #include "GameMessageManager.h"
 #include "defines.h"
 #include "Game.h"
-#include "KeyboardMessage.h"
-
+#include "PlayerMoveToMessage.h"
+#include "DeleteRandomUnitMessage.h"
+#include "AddRandomUnitMessage.h"
+#include "CloseMessage.h"
 
 InputSystem::InputSystem()
 {
@@ -40,11 +42,28 @@ void InputSystem::update()
 	{
 		if (mBitwiseKeyStates[i] || 0x0)
 		{
-			//EventSystem::getInstance()->fireEvent(KeyEvent(mBitwiseKeyStates[i], KeyCode(i)));
-			GameMessage* pMessage = new KeyboardMessage(mBitwiseKeyStates[i], KeyCode(i));
+			if (i == static_cast<int>(KeyCode::SCANCODE_END) && getHasByte(mBitwiseKeyStates[i], StateBitValues::JUST_PRESSED))
+			{
+				GameMessage* pMessage = new AddRandomUnitMessage();
+				MESSAGE_MANAGER->addMessage(pMessage, 0);
+			}
+			else if (i == static_cast<int>(KeyCode::SCANCODE_D) && getHasByte(mBitwiseKeyStates[i], StateBitValues::JUST_PRESSED))
+			{
+				GameMessage* pMessage = new DeleteRandomUnitMessage();
+				MESSAGE_MANAGER->addMessage(pMessage, 0);
+			}
+			else if(i == static_cast<int>(KeyCode::SCANCODE_ESCAPE) && getHasByte(mBitwiseKeyStates[i], StateBitValues::CURRENTLY_PRESSED))
+			{
+			GameMessage* pMessage = new CloseMessage();
 			MESSAGE_MANAGER->addMessage(pMessage, 0);
+			}
 		}
 
+	}
+	if (getHasByte(mLeftMouse, StateBitValues::CURRENTLY_PRESSED))
+	{
+		GameMessage* pMessage = new PlayerMoveToMessage(mMouseLocation);
+		MESSAGE_MANAGER->addMessage(pMessage, 0);
 	}
 
 	//EventSystem::getInstance()->fireEvent(MouseKeyEvent(mRightMouse, mLeftMouse, mMouseLocation));
@@ -62,37 +81,39 @@ void InputSystem::mouseInputUpdate()
 	mRightMouse &= ~StateBitValues::JUST_PRESSED;
 
 	mRightMouse &= ~StateBitValues::JUST_RELEASED;
-
-	SDL_Event ev;
-
+	
 	//Loop through all recorded mouse events
 
-	while (SDL_PollEvent(&ev))
+	int x, y;
+	SDL_GetMouseState(&x, &y);
+	mMouseLocation = Vector2D(x, y);
+
+	if (SDL_GetMouseState(&x, &y) & SDL_BUTTON(SDL_BUTTON_LEFT))
 	{
+		BYTE* whichButton = &mLeftMouse;		
+		mLeftMouse |= StateBitValues::JUST_PRESSED;
+		mLeftMouse |= StateBitValues::CURRENTLY_PRESSED;
+
+	}
+	else if (!SDL_GetMouseState(&x, &y) & SDL_BUTTON(SDL_BUTTON_LEFT))
+	{
+		BYTE* whichButton = &mLeftMouse;
+		mLeftMouse &= ~StateBitValues::CURRENTLY_PRESSED;
+		mLeftMouse |= StateBitValues::JUST_RELEASED;
+	}
 
 
-		if (ev.type == SDL_MOUSEMOTION)
-
-		{
-			mMouseLocation = Vector2D(ev.motion.x, ev.motion.y);
-		}
-
-		else
-		{
-			BYTE* whichButton = (ev.button.button == SDL_BUTTON_LEFT) ? &mLeftMouse : &mRightMouse;
-
-			if (ev.button.state == SDL_MOUSEBUTTONDOWN)
-
-			{
-				*whichButton |= StateBitValues::JUST_PRESSED;
-				*whichButton |= StateBitValues::CURRENTLY_PRESSED;
-			}
-			else if (ev.button.state == SDL_MOUSEBUTTONUP)
-			{
-				*whichButton &= ~StateBitValues::CURRENTLY_PRESSED;
-				*whichButton |= StateBitValues::JUST_RELEASED;
-			}
-		}
+	if (SDL_GetMouseState(&x, &y) & SDL_BUTTON(SDL_BUTTON_RIGHT))
+	{
+		BYTE* whichButton = &mRightMouse;
+		mRightMouse |= StateBitValues::JUST_PRESSED;
+		mRightMouse |= StateBitValues::CURRENTLY_PRESSED;
+	}
+	else if(!SDL_GetMouseState(&x, &y) & SDL_BUTTON(SDL_BUTTON_RIGHT))
+	{
+		BYTE* whichButton = &mRightMouse;
+		mRightMouse &= ~StateBitValues::CURRENTLY_PRESSED;
+		mRightMouse |= StateBitValues::JUST_RELEASED;
 	}
 }
 
@@ -131,5 +152,14 @@ void InputSystem::keyInputUpdate()
 		}
 
 	}
+}
+
+
+bool InputSystem::getHasByte(const BYTE value, const BYTE comparison) const
+{
+	//check if the given comparison bit is set in "value"
+	//0101 & 0001 == 0001
+	return (value & comparison);
+
 }
 

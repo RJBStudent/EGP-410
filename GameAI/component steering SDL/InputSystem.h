@@ -17,6 +17,7 @@ public:
 	void update();
 	void mouseInputUpdate();
 	void keyInputUpdate();
+	bool getHasByte(const BYTE value, const BYTE comparison) const;
 
 
 private:
