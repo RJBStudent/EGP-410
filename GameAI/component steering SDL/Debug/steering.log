@@ -1,6 +1,2 @@
-﻿  DeleteRandomUnitMessage.cpp
-  AddRandomUnitMessage.cpp
-  Generating Code...
-  Skipping... (no relevant changes detected)
-  InputSystem.cpp
+﻿  SteeringComponent.cpp
   steering.vcxproj -> C:\Users\361rj\Documents\GitHub\EGP-410\GameAI\component steering SDL\Debug\steering.exe

@@ -16,5 +16,4 @@ AddRandomUnitMessage::~AddRandomUnitMessage()
 void AddRandomUnitMessage::process()
 {
 	gpGame->getUnitManager()->createRandomUnit(*gpGame->getSpriteManager()->getSprite(AI_ICON_SPRITE_ID));
-	gpGame->getUnitManager()->getUnit()
 }

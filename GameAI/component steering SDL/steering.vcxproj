@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClInclude Include="AddRandomUnitMessage.h" />
     <ClInclude Include="ArriveAndFaceSteering.h" />
+    <ClInclude Include="ArriveSteering.h" />
     <ClInclude Include="CloseMessage.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="Component.h" />
@@ -45,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AddRandomUnitMessage.cpp" />
+    <ClCompile Include="ArriveSteering.cpp" />
     <ClCompile Include="CloseMessage.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="Component.cpp" />
