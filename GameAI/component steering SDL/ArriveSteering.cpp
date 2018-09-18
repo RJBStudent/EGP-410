@@ -6,10 +6,10 @@
 #include "UnitManager.h"
 #include "Unit.h"
 
-ArriveSteering::ArriveSteering(const UnitID& ownerID, const Vector2D& targetLoc, const Steering::SteeringType seekType, const UnitID& targetID)
+ArriveSteering::ArriveSteering(const UnitID& ownerID, const Vector2D& targetLoc, const UnitID& targetID)
 	: Steering()
 {
-	mType = seekType;
+	mType = Steering::ARRIVE;
 	setOwnerID(ownerID);
 	setTargetID(targetID);
 	setTargetLoc(targetLoc);
@@ -29,18 +29,7 @@ Steering* ArriveSteering::getSteering()
 		mTargetLoc = pTarget->getPositionComponent()->getPosition();
 	}
 
-	if (mType == Steering::SEEK)
-	{
 		diff = mTargetLoc - pOwner->getPositionComponent()->getPosition();
-	}
-	else if(mType == Steering::FLEE)
-	{
-		diff = pOwner->getPositionComponent()->getPosition() - mTargetLoc;
-	}
-	else if (mType == Steering::ARRIVE)
-	{
-		diff = mTargetLoc - pOwner->getPositionComponent()->getPosition();
-	}
 	/*
 	if ((diff - mTargetLoc) == 0)
 	{
