@@ -51,7 +51,7 @@ void SteeringComponent::setData(const SteeringData& data)
 		case Steering::ARRIVE:			
 		{
 			delete mpSteering;
- 			mpSteering = new ArriveSteering(data.ownerID, data.targetLoc, data.targetID);
+ 			mpSteering = new ArriveSteering(data.ownerID, data.targetLoc, data.targetRadius, data.slowRadius, data.timeToTarget, data.targetID);
 			break;
 		}
 		default:

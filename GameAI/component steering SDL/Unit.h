@@ -38,7 +38,8 @@ public:
 	float getMaxRotVel() const { return mMaxRotVel; };
 	void setShowTarget(bool val) { mShowTarget = val; };
 
-	void setSteering(Steering::SteeringType type, Vector2D targetLoc = ZERO_VECTOR2D, UnitID targetUnitID = INVALID_UNIT_ID);
+	void setSteering(Steering::SteeringType type, Vector2D targetLoc = ZERO_VECTOR2D, const float theTargetRadius = 0,
+		const float theSlowRadius = 0, const float theTimeToTarget = 0.1 , UnitID targetUnitID = INVALID_UNIT_ID);
 
 private:
 	UnitID mID;

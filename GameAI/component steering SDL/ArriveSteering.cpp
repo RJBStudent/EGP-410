@@ -6,19 +6,26 @@
 #include "UnitManager.h"
 #include "Unit.h"
 
-ArriveSteering::ArriveSteering(const UnitID& ownerID, const Vector2D& targetLoc, const UnitID& targetID)
+ArriveSteering::ArriveSteering(const UnitID& ownerID, const Vector2D& targetLoc, const float theTargetRadius, const float theSlowRadius,
+	const float theTimeToTarget, const UnitID& targetID)
 	: Steering()
 {
 	mType = Steering::ARRIVE;
 	setOwnerID(ownerID);
 	setTargetID(targetID);
 	setTargetLoc(targetLoc);
+	setTargetRadius(theTargetRadius);
+	setSlowRadius(theSlowRadius);
+	setTImeToTarget(theTimeToTarget);
 }
 
 Steering* ArriveSteering::getSteering()
 {
+	float targetSpeed;
 	Vector2D diff;
+	float distance;
 	Unit* pOwner = gpGame->getUnitManager()->getUnit(mOwnerID);
+	PhysicsData data = pOwner->getPhysicsComponent()->getData();
 	//are we seeking a location or a unit?
 
 	if (mTargetID != INVALID_UNIT_ID)
@@ -29,22 +36,37 @@ Steering* ArriveSteering::getSteering()
 		mTargetLoc = pTarget->getPositionComponent()->getPosition();
 	}
 
-		diff = mTargetLoc - pOwner->getPositionComponent()->getPosition();
-	/*
-	if ((diff - mTargetLoc) == 0)
+	diff = mTargetLoc - pOwner->getPositionComponent()->getPosition();
+	distance = diff.getLength();
+
+	if (distance < mTargetRadius)
 	{
  		return this;
 	}
-	*/
- 	diff.normalize();
-	diff *= pOwner->getMaxAcc();
 
-	//float velocityDirection = atan2(diff.getY(), diff.getX());
-	//pOwner->getPositionComponent()->setFacing(velocityDirection);
+	if (distance > mSlowRadius)
+	{
+		targetSpeed = data.maxSpeed;
+	}
+	else
+	{
+		targetSpeed = data.maxSpeed * distance / mSlowRadius;
+	}
+	
+	Vector2D targetVelocity = diff;
+	targetVelocity.normalize();
+	//targetVelocity *= 10;
+	targetVelocity *= targetSpeed;
 
-	PhysicsData data = pOwner->getPhysicsComponent()->getData();
-	data.acc = diff;
-	//data.rotVel = 1.0f;
+	data.acc = targetVelocity - data.vel;
+	data.acc /= mTimeToTarget;
+
+	if (data.acc.getLength() > data.maxAccMagnitude)
+	{
+		data.acc.normalize();
+		data.acc *= data.maxAccMagnitude;
+	}
+	
 	this->mData = data;
 	return this;
 }
