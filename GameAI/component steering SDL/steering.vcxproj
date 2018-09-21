@@ -52,6 +52,7 @@
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="ComponentManager.cpp" />
     <ClCompile Include="DeleteRandomUnitMessage.cpp" />
+    <ClCompile Include="FaceSteering.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameMessage.cpp" />

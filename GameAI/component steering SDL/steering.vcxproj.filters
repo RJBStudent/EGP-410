@@ -82,6 +82,9 @@
     <ClCompile Include="ArriveSteering.cpp">
       <Filter>Source Files\Steering</Filter>
     </ClCompile>
+    <ClCompile Include="FaceSteering.cpp">
+      <Filter>Source Files\Steering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GraphicsBuffer.h">
