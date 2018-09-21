@@ -1,3 +1,2 @@
-﻿  PlayerMoveToMessage.cpp
-c:\users\361rj\documents\github\egp-410\gameai\component steering sdl\playermovetomessage.cpp(19): warning C4305: 'argument': truncation from 'double' to 'const float'
+﻿  UnitManager.cpp
   steering.vcxproj -> C:\Users\361rj\Documents\GitHub\EGP-410\GameAI\component steering SDL\Debug\steering.exe
