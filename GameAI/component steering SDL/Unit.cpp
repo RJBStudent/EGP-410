@@ -70,11 +70,11 @@ SteeringComponent* Unit::getSteeringComponent() const
 }
 
 void Unit::setSteering(Steering::SteeringType type, Vector2D targetLoc /*= ZERO_VECTOR2D*/, const float theTargetRadius/* = 0*/,
-	const float theSlowRadius/* = 0*/, const float theTimeToTarget/* = 0*/, UnitID targetUnitID /*= INVALID_UNIT_ID*/)
+	const float theSlowRadius/* = 0*/, const float theTimeToTarget/* = 0*/, const float theTargetRadians, const float theSlowRadians, UnitID targetUnitID /*= INVALID_UNIT_ID*/)
 {
 	SteeringComponent* pSteeringComponent = getSteeringComponent();
 	if (pSteeringComponent != NULL)
 	{
- 		pSteeringComponent->setData(SteeringData(type, targetLoc, mID, targetUnitID, theTargetRadius, theSlowRadius, theTimeToTarget));
+ 		pSteeringComponent->setData(SteeringData(type, targetLoc, mID, targetUnitID, theTargetRadius, theSlowRadius, theTimeToTarget, theTargetRadians, theSlowRadians));
 	}
 }

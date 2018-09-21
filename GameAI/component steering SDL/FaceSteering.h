@@ -7,9 +7,9 @@
 class FaceSteering : public Steering
 {
 public:
-	FaceSteering(const UnitID& ownerID, const Vector2D& targetLoc, const float theTargetRadius = 0, const float theSlowRadius = 0,
+	FaceSteering(const UnitID& ownerID, const Vector2D& targetLoc, const float theTargetRadians = 0, const float theSlowRadians = 0,
 		const float theTimeToTarget = 0, const UnitID& targetID = INVALID_UNIT_ID);
-
+	friend class ArriveAndFaceSteering;
 protected:
 	virtual Steering* getSteering();
 };

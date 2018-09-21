@@ -6,9 +6,12 @@
 #include "UnitManager.h"
 #include "ArriveAndFaceSteering.h"
 #include "Unit.h"
+#include "FaceSteering.h"
+#include "ArriveSteering.h"
+
 
 ArriveAndFaceSteering::ArriveAndFaceSteering(const UnitID& ownerID, const Vector2D& targetLoc, const float theTargetRadius, const float theSlowRadius,
-	const float theTimeToTarget, const UnitID& targetID)
+	const float theTimeToTarget, const float theTargetRadians, const float theSlowRadians, const UnitID& targetID)
 	: Steering()
 {
 	mType = Steering::ARRIVE_AND_FACE;
@@ -17,27 +20,25 @@ ArriveAndFaceSteering::ArriveAndFaceSteering(const UnitID& ownerID, const Vector
 	setTargetLoc(targetLoc);
 	setTargetRadius(theTargetRadius);
 	setSlowRadius(theSlowRadius);
-	setTImeToTarget(theTimeToTarget);
+	setTimeToTarget(theTimeToTarget);
+	mArriveSteer = new ArriveSteering(mOwnerID, mTargetLoc, mTargetRadius, mSlowRadius, mTimeToTarget, mTargetID);
+	mFaceSteer = new FaceSteering(mOwnerID, mTargetLoc, mTargetRadians, mSlowRadians, mTimeToTarget, mTargetID);
+}
+
+ArriveAndFaceSteering::~ArriveAndFaceSteering()
+{
+	delete mArriveSteer;
+	delete mFaceSteer;
 }
 
 Steering* ArriveAndFaceSteering::getSteering()
 {
-	float targetSpeed;
-	Vector2D diff;
-	float distance;
 	Unit* pOwner = gpGame->getUnitManager()->getUnit(mOwnerID);
 	PhysicsData data = pOwner->getPhysicsComponent()->getData();
-	//are we seeking a location or a unit?
-
-	if (mTargetID != INVALID_UNIT_ID)
-	{
-		//seeking unit
-		Unit* pTarget = gpGame->getUnitManager()->getUnit(mTargetID);
-		assert(pTarget != NULL);
-		mTargetLoc = pTarget->getPositionComponent()->getPosition();
-	}
-
-
+	data = mFaceSteer->getSteering()->getData();	
+	pOwner->getPhysicsComponent()->setData(data);
+	data = mArriveSteer->getSteering()->getData();
+	//pOwner->getPhysicsComponent()->setData(data);
 	this->mData = data;
 	return this;
 }

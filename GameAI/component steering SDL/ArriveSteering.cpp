@@ -16,7 +16,7 @@ ArriveSteering::ArriveSteering(const UnitID& ownerID, const Vector2D& targetLoc,
 	setTargetLoc(targetLoc);
 	setTargetRadius(theTargetRadius);
 	setSlowRadius(theSlowRadius);
-	setTImeToTarget(theTimeToTarget);
+	setTimeToTarget(theTimeToTarget);
 }
 
 Steering* ArriveSteering::getSteering()
@@ -55,7 +55,6 @@ Steering* ArriveSteering::getSteering()
 	
 	Vector2D targetVelocity = diff;
 	targetVelocity.normalize();
-	//targetVelocity *= 10;
 	targetVelocity *= targetSpeed;
 
 	data.acc = targetVelocity - data.vel;

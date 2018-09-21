@@ -16,7 +16,7 @@ PlayerMoveToMessage::~PlayerMoveToMessage()
 void PlayerMoveToMessage::process()
 {
 	Unit* pPlayer = gpGame->getUnitManager()->getPlayerUnit();
-	pPlayer->setSteering(Steering::FACE, mPos, 0, 100, 0.1);
+	pPlayer->setSteering(Steering::ARRIVE_AND_FACE, mPos, 0, 100, 0.1, 0, 0.5);
 	
 }
 

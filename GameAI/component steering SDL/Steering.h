@@ -37,7 +37,9 @@ public:
 	void setOwnerID(const UnitID& id) { mOwnerID = id; };
 	void setTargetRadius(const float targetRadius) { mTargetRadius = targetRadius; }
 	void setSlowRadius(const float slowRadius) { mSlowRadius = slowRadius; }
-	void setTImeToTarget(const float timeToTarget) { mTimeToTarget = timeToTarget; }
+	void setTimeToTarget(const float timeToTarget) { mTimeToTarget = timeToTarget; }
+	void setSlowRadians(const float slowRadians) { mSlowRadians = slowRadians; }
+	void setTargetRadians(const float targetRadians) { mTargetRadians = targetRadians; }
 	//void setData(const PhysicsData& data) { mData = data; };
 	const PhysicsData& getData() const { return mData; };
 	void update();
@@ -50,6 +52,8 @@ protected:
 	float mTargetRadius;
 	float mSlowRadius;
 	float mTimeToTarget;
+	float mSlowRadians;
+	float mTargetRadians;
 
 	virtual Steering* getSteering() { return this; };//overridden by sub-classes
 

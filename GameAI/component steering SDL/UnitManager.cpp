@@ -76,7 +76,7 @@ Unit* UnitManager::createRandomUnit(const Sprite& sprite)
 	{
 		//pUnit->setSteering(Steering::SEEK, Vector2D(rand() % gpGame->getGraphicsSystem()->getWidth(), rand() % gpGame->getGraphicsSystem()->getHeight()));
 		//pUnit->setSteering(Steering::SEEK, Vector2D(gpGame->getGraphicsSystem()->getWidth()/2, gpGame->getGraphicsSystem()->getHeight()/2));
-		pUnit->setSteering(Steering::FACE, ZERO_VECTOR2D);
+		pUnit->setSteering(Steering::FACE, ZERO_VECTOR2D, .5, 1, 0.1);
 	}
 	return pUnit;
 }

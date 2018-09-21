@@ -16,7 +16,7 @@ WanderSteering::WanderSteering(const UnitID& ownerID, const Vector2D& targetLoc,
 	setTargetLoc(targetLoc);
 	setTargetRadius(theTargetRadius);
 	setSlowRadius(theSlowRadius);
-	setTImeToTarget(theTimeToTarget);
+	setTimeToTarget(theTimeToTarget);
 }
 
 Steering* WanderSteering::getSteering()

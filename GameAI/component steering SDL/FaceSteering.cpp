@@ -5,8 +5,9 @@
 #include "Game.h"
 #include "UnitManager.h"
 #include "Unit.h"
+#include <math.h>
 
-FaceSteering::FaceSteering(const UnitID& ownerID, const Vector2D& targetLoc, const float theTargetRadius, const float theSlowRadius,
+FaceSteering::FaceSteering(const UnitID& ownerID, const Vector2D& targetLoc, const float theTargetRadians, const float theSlowRadians,
 	const float theTimeToTarget, const UnitID& targetID)
 	: Steering()
 {
@@ -14,9 +15,9 @@ FaceSteering::FaceSteering(const UnitID& ownerID, const Vector2D& targetLoc, con
 	setOwnerID(ownerID);
 	setTargetID(targetID);
 	setTargetLoc(targetLoc);
-	setTargetRadius(theTargetRadius);
-	setSlowRadius(theSlowRadius);
-	setTImeToTarget(theTimeToTarget);
+	setTargetRadians(theTargetRadians);
+	setSlowRadians(theSlowRadians);
+	setTimeToTarget(theTimeToTarget);
 }
 
 Steering* FaceSteering::getSteering()
@@ -26,7 +27,8 @@ Steering* FaceSteering::getSteering()
 	float distance;
 	Unit* pOwner = gpGame->getUnitManager()->getUnit(mOwnerID);
 	PhysicsData data = pOwner->getPhysicsComponent()->getData();
-	float orientation;
+	float targetOrientation;
+	float rotDiff;
 
 	//are we seeking a location or a unit?
 
@@ -37,20 +39,62 @@ Steering* FaceSteering::getSteering()
 		assert(pTarget != NULL);
 		mTargetLoc = pTarget->getPositionComponent()->getPosition();
 	}
-
 	
-
 	diff = mTargetLoc - pOwner->getPositionComponent()->getPosition();
-	if (diff.getLength() == 0)
+	targetOrientation = atan2(diff.getY(), diff.getX());
+
+ 	if (diff.getLength() == 0)
 	{
 		return this;
 	}
 
-	float velocityDirection = atan2(diff.getY(), diff.getX());
-	pOwner->getPositionComponent()->setFacing(velocityDirection);
+	rotDiff = targetOrientation - pOwner->getPositionComponent()->getFacing();
 
+	float piMin = -2 * PI;
+	float piMax = 2 * PI;
 
-	
+	if (rotDiff > piMax)
+	{
+		while (rotDiff > piMax)
+		{
+			rotDiff /= piMax;
+		}
+	}
+	else if (rotDiff < piMin)
+	{
+		while (rotDiff < piMin)
+		{
+			rotDiff /= piMax;
+		}
+	}
+
+	float targetRotation;
+
+	float rotationSize = abs(rotDiff);
+
+	if (rotationSize < mTargetRadians)
+	{
+		return this;
+	}
+	if (rotationSize > mSlowRadians)
+	{
+ 		targetRotation = data.maxRotVel;
+	}
+	else
+	{
+		targetRotation = data.maxRotVel * rotationSize / mSlowRadians;
+	}
+	targetRotation *= targetOrientation / rotationSize;
+
+	data.rotAcc = rotDiff - data.rotVel;
+	data.rotAcc /= mTimeToTarget;
+
+	float angularAcceleration = abs(data.rotAcc);
+	if (angularAcceleration > data.maxRotAcc)
+	{
+		data.rotAcc /= angularAcceleration;
+		data.rotAcc *= data.maxRotAcc;
+	}
 
 	this->mData = data;
 	return this;
