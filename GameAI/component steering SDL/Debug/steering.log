@@ -1,6 +1,6 @@
-﻿  ArriveAndFaceSteering.cpp
-  Generating Code...
-  Skipping... (no relevant changes detected)
-  SteeringComponent.cpp
-  ArriveSteering.cpp
+﻿  FaceSteering.cpp
+c:\users\361rj\documents\github\egp-410\gameai\component steering sdl\facesteering.cpp(53): warning C4305: 'initializing': truncation from 'const double' to 'float'
+c:\users\361rj\documents\github\egp-410\gameai\component steering sdl\facesteering.cpp(54): warning C4305: 'initializing': truncation from 'const double' to 'float'
+c:\users\361rj\documents\github\egp-410\gameai\component steering sdl\facesteering.cpp(27): warning C4101: 'distance': unreferenced local variable
+c:\users\361rj\documents\github\egp-410\gameai\component steering sdl\facesteering.cpp(25): warning C4101: 'targetSpeed': unreferenced local variable
   steering.vcxproj -> C:\Users\361rj\Documents\GitHub\EGP-410\GameAI\component steering SDL\Debug\steering.exe
