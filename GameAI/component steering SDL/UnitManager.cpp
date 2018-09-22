@@ -71,12 +71,13 @@ Unit* UnitManager::createRandomUnit(const Sprite& sprite)
 	int posY = rand() % gpGame->getGraphicsSystem()->getHeight();
 	int velX = rand() % 50 - 25;
 	int velY = rand() % 40 - 20;
+
 	Unit* pUnit = createUnit(sprite, false, PositionData(Vector2D(posX,posY),0), PhysicsData(Vector2D(velX,velY),ZERO_VECTOR2D, 0, 0));
 	if (pUnit != NULL)
 	{
 		//pUnit->setSteering(Steering::SEEK, Vector2D(rand() % gpGame->getGraphicsSystem()->getWidth(), rand() % gpGame->getGraphicsSystem()->getHeight()));
 		//pUnit->setSteering(Steering::SEEK, Vector2D(gpGame->getGraphicsSystem()->getWidth()/2, gpGame->getGraphicsSystem()->getHeight()/2));
-		pUnit->setSteering(Steering::FACE, ZERO_VECTOR2D, .5, 1, 0.1);
+		pUnit->setSteering(Steering::WANDER_AND_CHASE, ZERO_VECTOR2D, 0, 0, 0.1, 0, 0.5, 30, 10, .1, 0, 150, gpGame->getUnitManager()->getPlayerUnit()->mID);
 	}
 	return pUnit;
 }

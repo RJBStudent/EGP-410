@@ -74,6 +74,7 @@
     <ClCompile Include="SteeringComponent.cpp" />
     <ClCompile Include="Unit.cpp" />
     <ClCompile Include="UnitManager.cpp" />
+    <ClCompile Include="WanderAndChaseSteering.cpp" />
     <ClCompile Include="WanderSteering.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

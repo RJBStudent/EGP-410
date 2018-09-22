@@ -14,10 +14,11 @@ struct SteeringData : public Trackable
 	SteeringData():type(Steering::INVALID_TYPE), targetLoc(ZERO_VECTOR2D), ownerID(INVALID_UNIT_ID), targetID(INVALID_UNIT_ID){};
 	SteeringData(Steering::SteeringType theType, const Vector2D& theTargetLoc = ZERO_VECTOR2D, UnitID theOwner = INVALID_UNIT_ID,
 		UnitID theTarget = INVALID_UNIT_ID, const float theTargetRadius = 0, const float theSlowRadius = 0,
-		const float theTimeToTarget = 0, const float theTargetRadians = 0, const float theSlowRadians = 0)
-		:type(theType), targetLoc(theTargetLoc), ownerID(theOwner), targetID(theTarget),
-		targetRadius(theTargetRadius), slowRadius(theSlowRadius),
-		timeToTarget(theTimeToTarget), targetRadians(theTargetRadians), slowRadians(theSlowRadians){};
+		const float theTimeToTarget = 0, const float theTargetRadians = 0, const float theSlowRadians = 0,
+		const float theWanderOffset = 0, const float theWanderRadius = 0, const float theWanderRate = 0, const float theWanderOrientation = 0, const float theChaseRadius = 0)
+		:type(theType), targetLoc(theTargetLoc), ownerID(theOwner), targetID(theTarget), targetRadius(theTargetRadius),
+		slowRadius(theSlowRadius),timeToTarget(theTimeToTarget), targetRadians(theTargetRadians), 
+		slowRadians(theSlowRadians), wanderOffset(theWanderOffset), wanderRadius(theWanderRadius), wanderRate(theWanderRate), wanderOrientation(theWanderOrientation), chaseRadius(theChaseRadius){};
 	Steering::SteeringType type;
 	Vector2D targetLoc;
 	float targetRadius;
@@ -25,6 +26,11 @@ struct SteeringData : public Trackable
 	float timeToTarget;
 	float targetRadians;
 	float slowRadians;
+	float wanderOffset;
+	float wanderRadius;
+	float wanderRate;
+	float wanderOrientation;
+	float chaseRadius;
 	UnitID ownerID;
 	UnitID targetID;
 };
@@ -42,16 +48,6 @@ public:
 	ComponentID getPhysicsComponentID() const { return mPhysicsComponentID; };
 	const SteeringData& getData() const { return mData; };
 	void setData(const SteeringData& data);
-	/*void setTargetLoc(const Vector2D& pos) { mData.targetLoc = pos; };
-	void setTargetUnitID(const UnitID& id) { mData.targetID = id; };
-	void setTargetRadius(const float targetRadius) { mData.targetRadius = targetRadius; }
-	void setSlowRadius(const float slowRadius) { mData.slowRadius = slowRadius; }
-	void setTimeToTarget(const float timeToTarget) { mData.timeToTarget = timeToTarget; }
-	void setSlowRadians(const float slowRadians) { mData.slowRadians = slowRadians; }
-	void setTargetRadians(const float targetRadians) { mData.targetRadians = targetRadians; }
-
-
-	*/
 
 
 	void applySteering(PhysicsComponent& physicsComponent);

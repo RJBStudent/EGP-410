@@ -6,66 +6,42 @@
 #include "UnitManager.h"
 #include "Unit.h"
 
-WanderSteering::WanderSteering(const UnitID& ownerID, const Vector2D& targetLoc, const float theTargetRadius, const float theSlowRadius,
-	const float theTimeToTarget, const UnitID& targetID)
+WanderSteering::WanderSteering(const UnitID& ownerID, const float theWanderOffset, const float theWanderRadius, const float theWanderRate, 
+	const float theWanderOrientation, const UnitID& targetID)
 	: Steering()
 {
 	mType = Steering::WANDER;
 	setOwnerID(ownerID);
 	setTargetID(targetID);
-	setTargetLoc(targetLoc);
-	setTargetRadius(theTargetRadius);
-	setSlowRadius(theSlowRadius);
-	setTimeToTarget(theTimeToTarget);
-}
+	setWanderOffset(theWanderOffset);
+	setWanderRate(theWanderRate);
+	setWanderRadius(theWanderRadius);
+	setWanderOrientation(theWanderOrientation);
+	
 
+}
 Steering* WanderSteering::getSteering()
 {
-	float targetSpeed;
-	Vector2D diff;
-	float distance;
 	Unit* pOwner = gpGame->getUnitManager()->getUnit(mOwnerID);
 	PhysicsData data = pOwner->getPhysicsComponent()->getData();
-	//are we seeking a location or a unit?
+	float targetOrientation;
+	Vector2D target;
+	
+	mWanderOrientation += genRandomBinomial() * mWanderRate;
+	targetOrientation = mWanderOrientation + pOwner->getPositionComponent()->getFacing();
 
-	if (mTargetID != INVALID_UNIT_ID)
-	{
-		//seeking unit
-		Unit* pTarget = gpGame->getUnitManager()->getUnit(mTargetID);
-		assert(pTarget != NULL);
-		mTargetLoc = pTarget->getPositionComponent()->getPosition();
-	}
+ 	Vector2D targetOrientationAsVector = Vector2D(cos(targetOrientation), sin(targetOrientation));
+	Vector2D characterOrientationAsVector = Vector2D(cos(pOwner->getPositionComponent()->getFacing()), sin(pOwner->getPositionComponent()->getFacing()));
 
-	diff = mTargetLoc - pOwner->getPositionComponent()->getPosition();
-	distance = diff.getLength();
+	target = pOwner->getPositionComponent()->getPosition() + characterOrientationAsVector.operator*(mWanderOffset);
 
-	if (distance < mTargetRadius)
-	{
-		return this;
-	}
+	target += targetOrientationAsVector.operator*(mWanderRadius);
+	characterOrientationAsVector = Vector2D(cos(pOwner->getPositionComponent()->getFacing()), sin(pOwner->getPositionComponent()->getFacing()));
+	Vector2D diff = target - pOwner->getPositionComponent()->getPosition();
 
-	if (distance > mSlowRadius)
-	{
-		targetSpeed = data.maxSpeed;
-	}
-	else
-	{
-		targetSpeed = data.maxSpeed * distance / mSlowRadius;
-	}
-
-	Vector2D targetVelocity = diff;
-	targetVelocity.normalize();
-	//targetVelocity *= 10;
-	targetVelocity *= targetSpeed;
-
-	data.acc = targetVelocity - data.vel;
-	data.acc /= mTimeToTarget;
-
-	if (data.acc.getLength() > data.maxAccMagnitude)
-	{
-		data.acc.normalize();
-		data.acc *= data.maxAccMagnitude;
-	}
+	float velocityDirection = atan2(diff.getY(), diff.getX());
+	pOwner->getPositionComponent()->setFacing(velocityDirection);
+ 	data.acc = characterOrientationAsVector.operator*(data.maxAccMagnitude);
 
 	this->mData = data;
 	return this;

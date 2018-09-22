@@ -21,23 +21,23 @@ ArriveAndFaceSteering::ArriveAndFaceSteering(const UnitID& ownerID, const Vector
 	setTargetRadius(theTargetRadius);
 	setSlowRadius(theSlowRadius);
 	setTimeToTarget(theTimeToTarget);
-	mArriveSteer = new ArriveSteering(mOwnerID, mTargetLoc, mTargetRadius, mSlowRadius, mTimeToTarget, mTargetID);
-	mFaceSteer = new FaceSteering(mOwnerID, mTargetLoc, mTargetRadians, mSlowRadians, mTimeToTarget, mTargetID);
+	mpArriveSteer = new ArriveSteering(mOwnerID, mTargetLoc, mTargetRadius, mSlowRadius, mTimeToTarget, mTargetID);
+	mpFaceSteer = new FaceSteering(mOwnerID, mTargetLoc, mTargetRadians, mSlowRadians, mTimeToTarget, mTargetID);
 }
 
 ArriveAndFaceSteering::~ArriveAndFaceSteering()
 {
-	delete mArriveSteer;
-	delete mFaceSteer;
+	delete mpArriveSteer;
+	delete mpFaceSteer;
 }
 
 Steering* ArriveAndFaceSteering::getSteering()
 {
 	Unit* pOwner = gpGame->getUnitManager()->getUnit(mOwnerID);
 	PhysicsData data = pOwner->getPhysicsComponent()->getData();
-	data = mFaceSteer->getSteering()->getData();	
+	data = mpFaceSteer->getSteering()->getData();	
 	pOwner->getPhysicsComponent()->setData(data);
-	data = mArriveSteer->getSteering()->getData();
+	data = mpArriveSteer->getSteering()->getData();
 	//pOwner->getPhysicsComponent()->setData(data);
 	this->mData = data;
 	return this;

@@ -40,6 +40,12 @@ public:
 	void setTimeToTarget(const float timeToTarget) { mTimeToTarget = timeToTarget; }
 	void setSlowRadians(const float slowRadians) { mSlowRadians = slowRadians; }
 	void setTargetRadians(const float targetRadians) { mTargetRadians = targetRadians; }
+	void setWanderOffset(const float wanderOffset) { mWanderOffset = wanderOffset; }
+	void setWanderRadius(const float wanderRadius) { mWanderRadius = wanderRadius; }
+	void setWanderRate(const float wanderRate) { mWanderRate = wanderRate; }
+	void setWanderOrientation(const float wanderOrientation) { mWanderOrientation = wanderOrientation; }
+	void setChaseRadius(const float chaseRadius) { mChaseRadius = chaseRadius; }
+	
 	//void setData(const PhysicsData& data) { mData = data; };
 	const PhysicsData& getData() const { return mData; };
 	void update();
@@ -54,6 +60,11 @@ protected:
 	float mTimeToTarget;
 	float mSlowRadians;
 	float mTargetRadians;
+	float mWanderOffset;
+	float mWanderRadius;
+	float mWanderRate;
+	float mWanderOrientation;
+	float mChaseRadius;
 
 	virtual Steering* getSteering() { return this; };//overridden by sub-classes
 

@@ -50,21 +50,19 @@ Steering* FaceSteering::getSteering()
 
 	rotDiff = targetOrientation - pOwner->getPositionComponent()->getFacing();
 
-	float piMin = -PI;
-	float piMax = PI;
 
-	if (rotDiff > piMax)
+	if (rotDiff > PI)
 	{
-		while (rotDiff > piMax)
+		while (rotDiff >PI)
 		{
-			rotDiff /= piMax;
+			rotDiff /= PI;
 		}
 	}
-	else if (rotDiff < piMin)
+	else if (rotDiff <-PI)
 	{
-		while (rotDiff < piMin)
+		while (rotDiff < -PI)
 		{
-			rotDiff /= piMax;
+			rotDiff /= -PI;
 		}
 	}
 
