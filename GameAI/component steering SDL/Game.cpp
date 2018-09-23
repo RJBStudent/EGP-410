@@ -17,6 +17,7 @@
 #include "ComponentManager.h"
 #include "UnitManager.h"
 #include "InputSystem.h"
+#include <time.h>
 
 Game* gpGame = NULL;
 
@@ -47,6 +48,7 @@ Game::~Game()
 
 bool Game::init()
 {
+	srand(static_cast<unsigned>(time(NULL)));
 	mShouldExit = false;
 
 	//create Timers
@@ -109,6 +111,8 @@ bool Game::init()
 	Unit* pUnit = mpUnitManager->createPlayerUnit(*pArrowSprite);
 	pUnit->setShowTarget(true);
 	pUnit->setSteering(Steering::ARRIVE_AND_FACE, ZERO_VECTOR2D, 0, 100, 0.1, 0, 0.5);
+
+	
 /*
 	//create 2 enemies
 	pUnit = mpUnitManager->createUnit(*pEnemyArrow, true, PositionData(Vector2D((float)gpGame->getGraphicsSystem()->getWidth()-1, 0.0f), 0.0f));

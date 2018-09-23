@@ -41,6 +41,9 @@ Steering* ArriveSteering::getSteering()
 
 	if (distance < mTargetRadius)
 	{
+		data.vel = 0;
+		data.acc = 0;
+		this->mData = data;
  		return this;
 	}
 
@@ -67,5 +70,6 @@ Steering* ArriveSteering::getSteering()
 	}
 	
 	this->mData = data;
+
 	return this;
 }

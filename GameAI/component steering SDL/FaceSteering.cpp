@@ -51,27 +51,25 @@ Steering* FaceSteering::getSteering()
 	rotDiff = targetOrientation - pOwner->getPositionComponent()->getFacing();
 
 
+
+	rotDiff = fmod(rotDiff, 2*PI);
+
 	if (rotDiff > PI)
 	{
-		while (rotDiff >PI)
-		{
-			rotDiff /= PI;
-		}
+		rotDiff = (rotDiff - PI) * -1;
 	}
 	else if (rotDiff <-PI)
 	{
-		while (rotDiff < -PI)
-		{
-			rotDiff /= -PI;
-		}
+		rotDiff = (rotDiff + PI) * 1;
 	}
-
 	float targetRotation;
 
 	float rotationSize = abs(rotDiff);
 
 	if (rotationSize < mTargetRadians)
 	{
+		data.rotAcc = 0;
+		this->mData = data;
 		return this;
 	}
 	if (rotationSize > mSlowRadians)
@@ -88,10 +86,10 @@ Steering* FaceSteering::getSteering()
 	data.rotAcc /= mTimeToTarget;
 
 	float angularAcceleration = abs(data.rotAcc);
-	if (angularAcceleration > data.maxRotAcc)
+	if (angularAcceleration > pOwner->getMaxRotAcc())
 	{
 		data.rotAcc /= angularAcceleration;
-		data.rotAcc *= data.maxRotAcc;
+		data.rotAcc *= pOwner->getMaxRotAcc();
 	}
 
 	this->mData = data;

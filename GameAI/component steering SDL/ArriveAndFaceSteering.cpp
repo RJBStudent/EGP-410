@@ -35,6 +35,20 @@ Steering* ArriveAndFaceSteering::getSteering()
 {
 	Unit* pOwner = gpGame->getUnitManager()->getUnit(mOwnerID);
 	PhysicsData data = pOwner->getPhysicsComponent()->getData();
+	Vector2D diff;
+	float distance;
+	diff = mTargetLoc - pOwner->getPositionComponent()->getPosition();
+	distance = diff.getLength();
+
+	if (distance < mTargetRadius)
+	{
+		data.vel = 0;
+		data.acc = 0;
+		data.rotAcc = 0;
+		data.rotVel = 0;
+		this->mData = data;
+		return this;
+	}
 	data = mpFaceSteer->getSteering()->getData();	
 	pOwner->getPhysicsComponent()->setData(data);
 	data = mpArriveSteer->getSteering()->getData();
