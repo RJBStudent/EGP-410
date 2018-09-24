@@ -110,7 +110,7 @@ bool Game::init()
 	//setup units
 	Unit* pUnit = mpUnitManager->createPlayerUnit(*pArrowSprite);
 	pUnit->setShowTarget(true);
-	pUnit->setSteering(Steering::ARRIVE_AND_FACE, ZERO_VECTOR2D, 0, 100, 0.1, 0, 0.5);
+	pUnit->setSteering(Steering::ARRIVE_AND_FACE, ZERO_VECTOR2D, TARGET_RADIUS, SLOW_RADIUS, TIME_TO_TARGET, TARGET_RADIANS, SLOW_RADIANS);
 
 	
 /*

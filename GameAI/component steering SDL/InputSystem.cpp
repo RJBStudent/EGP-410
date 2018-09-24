@@ -42,7 +42,7 @@ void InputSystem::update()
 	{
 		if (mBitwiseKeyStates[i] || 0x0)
 		{
-			if (i == static_cast<int>(KeyCode::SCANCODE_END) && getHasByte(mBitwiseKeyStates[i], StateBitValues::JUST_PRESSED))
+			if (i == static_cast<int>(KeyCode::SCANCODE_RETURN) && getHasByte(mBitwiseKeyStates[i], StateBitValues::JUST_PRESSED))
 			{
 				GameMessage* pMessage = new AddRandomUnitMessage();
 				MESSAGE_MANAGER->addMessage(pMessage, 0);

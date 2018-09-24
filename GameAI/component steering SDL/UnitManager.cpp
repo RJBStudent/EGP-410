@@ -79,7 +79,7 @@ Unit* UnitManager::createRandomUnit(const Sprite& sprite)
 	{
 		//pUnit->setSteering(Steering::SEEK, Vector2D(rand() % gpGame->getGraphicsSystem()->getWidth(), rand() % gpGame->getGraphicsSystem()->getHeight()));
 		//pUnit->setSteering(Steering::SEEK, Vector2D(gpGame->getGraphicsSystem()->getWidth()/2, gpGame->getGraphicsSystem()->getHeight()/2));
-		pUnit->setSteering(Steering::WANDER_AND_CHASE, ZERO_VECTOR2D, 0, 0, 0.1, 0.1, 0.5, 100, 50, 2 * PI, 0, 150, gpGame->getUnitManager()->getPlayerUnit()->mID);
+		pUnit->setSteering(Steering::WANDER_AND_CHASE, ZERO_VECTOR2D, TARGET_RADIUS, SLOW_RADIUS, TIME_TO_TARGET, TARGET_RADIANS, SLOW_RADIANS, WANDER_OFFSET, WANDER_RADIUS, WANDER_RATE, WANDER_ORIENTATION, CHASE_RADIUS, gpGame->getUnitManager()->getPlayerUnit()->mID);
 	}
 	return pUnit;
 }

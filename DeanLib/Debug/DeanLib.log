@@ -1,1 +1,10 @@
-﻿C:\Users\361rj\Documents\GitHub\EGP-410\DeanLib\DeanLib.vcxproj : error MSB4057: The target "Deploy" does not exist in the project.
+﻿  Vector2D.cpp
+  Trackable.cpp
+  Timer.cpp
+  PerformanceTracker.cpp
+  MemoryTracker.cpp
+  MemoryPool.cpp
+  CircularQueue.cpp
+  Generating Code...
+CircularQueue.obj : warning LNK4221: This object file does not define any previously undefined public symbols, so it will not be used by any link operation that consumes this library
+  DeanLib.vcxproj -> C:\Users\361rj\Documents\GitHub\EGP-410\DeanLib\lib\DeanLibDebug.lib

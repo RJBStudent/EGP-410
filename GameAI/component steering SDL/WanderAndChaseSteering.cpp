@@ -25,7 +25,7 @@ WanderAndChaseSteering::WanderAndChaseSteering(const UnitID& ownerID, const floa
 	setTimeToTarget(theTimeToTarget);
 	setChaseRadius(theChaseRadius);
 	mpSeekSteer = new SeekSteering(mOwnerID, ZERO_VECTOR2D, targetID);
-	mpWanderSteer = new WanderSteering(mOwnerID, mWanderOffset, mWanderRadius, mWanderRate, mWanderOrientation);
+	mpWanderSteer = new WanderSteering(mOwnerID, mTargetRadians, mSlowRadians, mTimeToTarget,mWanderOffset, mWanderRadius, mWanderRate, mWanderOrientation);
 }
 WanderAndChaseSteering::~WanderAndChaseSteering()
 {
