@@ -37,10 +37,10 @@ Steering* ArriveAndFaceSteering::getSteering()
 	PhysicsData data = pOwner->getPhysicsComponent()->getData();
 	Vector2D diff;
 	float distance;
-	diff = mTargetLoc - pOwner->getPositionComponent()->getPosition();
+ 	diff = mTargetLoc - pOwner->getPositionComponent()->getPosition();
 	distance = diff.getLength();
 
-	if (distance < mTargetRadius)
+	if (abs(distance )<= mTargetRadius)
 	{
 		data.vel = 0;
 		data.acc = 0;

@@ -56,17 +56,17 @@ Steering* FaceSteering::getSteering()
 
 	if (rotDiff > PI)
 	{
-		rotDiff = (rotDiff - PI) * -1;
+		rotDiff = (2*PI - rotDiff );
 	}
 	else if (rotDiff <-PI)
 	{
-		rotDiff = (rotDiff + PI) * 1;
+		rotDiff = (2*PI + rotDiff);
 	}
 	float targetRotation;
 
 	float rotationSize = abs(rotDiff);
 
-	if (rotationSize < mTargetRadians)
+	if (rotationSize <= mTargetRadians)
 	{
 		data.rotAcc = 0;
 		this->mData = data;

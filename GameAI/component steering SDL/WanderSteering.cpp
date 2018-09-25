@@ -18,7 +18,8 @@ WanderSteering::WanderSteering(const UnitID& ownerID, const float theTargetRadia
 	setWanderOffset(theWanderOffset);
 	setWanderRate(theWanderRate);
 	setWanderRadius(theWanderRadius);
-	setWanderOrientation(theWanderOrientation);
+	//setWanderOrientation(theWanderOrientation);
+	setWanderOrientation(0);
 	setTargetRadians(theTargetRadians);
 	setSlowRadians(theSlowRadians);
 	setTimeToTarget(theTimeToTarget);
@@ -38,11 +39,10 @@ Steering* WanderSteering::getSteering()
 	
 	mWanderOrientation += genRandomBinomial() * mWanderRate;
 	targetOrientation = mWanderOrientation + pOwner->getPositionComponent()->getFacing();
-
  	Vector2D targetOrientationAsVector = Vector2D(cos(targetOrientation), sin(targetOrientation));
 	Vector2D characterOrientationAsVector = Vector2D(cos(pOwner->getPositionComponent()->getFacing()), sin(pOwner->getPositionComponent()->getFacing()));
 
-	target = pOwner->getPositionComponent()->getPosition() + characterOrientationAsVector * mWanderOffset;
+	target = pOwner->getPositionComponent()->getPosition() + (characterOrientationAsVector * mWanderOffset);
 	target += targetOrientationAsVector * mWanderRadius;
 	mpFaceSteer->setTargetLoc(target);
 
@@ -50,6 +50,7 @@ Steering* WanderSteering::getSteering()
 	if (faceData)
 	{
 		data.rotAcc = faceData->getData().rotAcc;
+		std::cout << data.rotAcc << std::endl;
 	}
 
 	characterOrientationAsVector = Vector2D(cos(pOwner->getPositionComponent()->getFacing()), sin(pOwner->getPositionComponent()->getFacing()));
