@@ -22,7 +22,11 @@ public:
 		FACE,
 		WANDER,
 		WANDER_AND_CHASE,
-		ARRIVE_AND_FACE
+		ARRIVE_AND_FACE,
+		SEPERATION,
+		COHESION,
+		GROUP_ALIGNEMENT,
+		FLOCKING
 	};
 
 	//constructors and destructors
@@ -67,5 +71,4 @@ protected:
 	float mChaseRadius;
 
 	virtual Steering* getSteering() { return this; };//overridden by sub-classes
-
 };
