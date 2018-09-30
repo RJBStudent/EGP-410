@@ -12,24 +12,35 @@ SeperationSteering::SeperationSteering(const UnitID& ownerID, std::vector<Unit*>
 
 SeperationSteering::~SeperationSteering()
 {
+	mLocalUnits.clear();
+	delete mpFlee;
+}
 
+void SeperationSteering::setNeighborhood(std::vector<Unit*> neighbourhood)
+{
+	if (mLocalUnits.size() > 0)
+	{
+		mLocalUnits.clear();
+	}
+	mLocalUnits = neighbourhood;
 }
 
 Steering* SeperationSteering::getSteering()
-{	Unit* pOwner = gpGame->getUnitManager()->getUnit(mOwnerID);
+{
+	Unit* pOwner = gpGame->getUnitManager()->getUnit(mOwnerID);
 	PhysicsData data = pOwner->getPhysicsComponent()->getData();
 	Vector2D target;
 	if (mLocalUnits.size() <= 0)
 	{
 		return this;
 	}
-	
+
 	target = getNeighbourhoodCenter();
 
 	mpFlee->setTargetLoc = target;
 	mpFlee->setOwnerID = mOwnerID;
 	data = mpFlee->getSteering()->getData();
-	
+
 	this->mData = data;
 	return this;
 }

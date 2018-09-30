@@ -53,6 +53,7 @@ public:
 	//void setData(const PhysicsData& data) { mData = data; };
 	const PhysicsData& getData() const { return mData; };
 	void update();
+	friend class FlockingSteering;
 protected:
 	SteeringType mType;
 	Vector2D mTargetLoc;

@@ -34,6 +34,7 @@ public:
 	void updateAll(float elapsedTime);
 
 	Unit* getPlayerUnit() const { return getUnit(PLAYER_UNIT_ID); };
+	std::map<UnitID, Unit*> getUnitMap() const{	return mUnitMap;};
 
 private:
 	static UnitID msNextUnitID;

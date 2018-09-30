@@ -12,6 +12,7 @@ public:
 	CohesionSteering(const UnitID& ownerID, std::vector<Unit*> localUnits);
 	~CohesionSteering();
 	void setNeighborhood(std::vector<Unit*>);
+	friend class FlockingSteering;
 protected:
 	virtual Steering* getSteering();
 private:

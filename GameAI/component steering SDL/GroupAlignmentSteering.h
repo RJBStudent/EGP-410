@@ -11,6 +11,7 @@ public:
 	GroupAlignmentSteering(const UnitID& ownerID, std::vector<Unit*> localUnits);
 	~GroupAlignmentSteering();
 	void setNeighborhood(std::vector<Unit*>);
+	friend class FlockingSteering;
 protected:
 	virtual Steering* getSteering();
 private:

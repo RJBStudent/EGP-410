@@ -5,12 +5,24 @@
 
 CohesionSteering::CohesionSteering(const UnitID& ownerID, std::vector<Unit*> localUnits)
 {
-
+	mOwnerID = ownerID;
+	setNeighborhood(localUnits);
 }
 
 CohesionSteering::~CohesionSteering()
 {
+	mLocalUnits.clear();
+	delete mpSeek;
+}
 
+
+void CohesionSteering::setNeighborhood(std::vector<Unit*> neighbourhood)
+{
+	if (mLocalUnits.size() > 0)
+	{
+		mLocalUnits.clear();
+	}
+	mLocalUnits = neighbourhood;
 }
 
 Steering* CohesionSteering::getSteering()

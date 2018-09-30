@@ -157,3 +157,4 @@ void UnitManager::updateAll(float elapsedTime)
 		it->second->update(elapsedTime);
 	}
 }
+
