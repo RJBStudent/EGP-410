@@ -7,6 +7,7 @@ CohesionSteering::CohesionSteering(const UnitID& ownerID, std::vector<Unit*> loc
 {
 	mOwnerID = ownerID;
 	setNeighborhood(localUnits);
+	mpSeek = new SeekSteering(mOwnerID, ZERO_VECTOR2D);
 }
 
 CohesionSteering::~CohesionSteering()
@@ -37,8 +38,8 @@ Steering* CohesionSteering::getSteering()
 
 	target = getNeighbourhoodCenter();
 
-	mpSeek->setTargetLoc = target;
-	mpSeek->setOwnerID = mOwnerID;
+	mpSeek->setTargetLoc(target);
+	mpSeek->setOwnerID(mOwnerID);
 	data = mpSeek->getSteering()->getData();
 
 	this->mData = data;
@@ -47,6 +48,7 @@ Steering* CohesionSteering::getSteering()
 
 Vector2D CohesionSteering::getNeighbourhoodCenter()
 {
+
 	Vector2D center = ZERO_VECTOR2D;
 	for (int i = 0; i < mLocalUnits.size(); i++)
 	{

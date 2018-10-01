@@ -7,8 +7,9 @@
 #include <Trackable.h>
 #include "defines.h"
 #include "PhysicsComponent.h"
+#include <vector>
 
-
+class Unit;
 
 class Steering: public Trackable
 {
@@ -72,4 +73,5 @@ protected:
 	float mChaseRadius;
 
 	virtual Steering* getSteering() { return this; };//overridden by sub-classes
+	virtual void setNeighbourhood(std::vector<Unit*> list) {}
 };

@@ -15,10 +15,10 @@ struct SteeringData : public Trackable
 	SteeringData(Steering::SteeringType theType, const Vector2D& theTargetLoc = ZERO_VECTOR2D, UnitID theOwner = INVALID_UNIT_ID,
 		UnitID theTarget = INVALID_UNIT_ID, const float theTargetRadius = 0, const float theSlowRadius = 0,
 		const float theTimeToTarget = 0, const float theTargetRadians = 0, const float theSlowRadians = 0,
-		const float theWanderOffset = 0, const float theWanderRadius = 0, const float theWanderRate = 0, const float theWanderOrientation = 0, const float theChaseRadius = 0)
+		const float theWanderOffset = 0, const float theWanderRadius = 0, const float theWanderRate = 0, const float theWanderOrientation = 0, const float theChaseRadius = 0, const float theGroupRadius = 0)
 		:type(theType), targetLoc(theTargetLoc), ownerID(theOwner), targetID(theTarget), targetRadius(theTargetRadius),
 		slowRadius(theSlowRadius),timeToTarget(theTimeToTarget), targetRadians(theTargetRadians), 
-		slowRadians(theSlowRadians), wanderOffset(theWanderOffset), wanderRadius(theWanderRadius), wanderRate(theWanderRate), wanderOrientation(theWanderOrientation), chaseRadius(theChaseRadius){};
+		slowRadians(theSlowRadians), wanderOffset(theWanderOffset), wanderRadius(theWanderRadius), wanderRate(theWanderRate), wanderOrientation(theWanderOrientation), chaseRadius(theChaseRadius), groupRadius(theGroupRadius){};
 	Steering::SteeringType type;
 	Vector2D targetLoc;
 	float targetRadius;
@@ -31,6 +31,7 @@ struct SteeringData : public Trackable
 	float wanderRate;
 	float wanderOrientation;
 	float chaseRadius;
+	float groupRadius;
 	UnitID ownerID;
 	UnitID targetID;
 };

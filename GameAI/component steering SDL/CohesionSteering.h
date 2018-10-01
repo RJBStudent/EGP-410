@@ -11,10 +11,11 @@ class CohesionSteering : public Steering
 public:
 	CohesionSteering(const UnitID& ownerID, std::vector<Unit*> localUnits);
 	~CohesionSteering();
-	void setNeighborhood(std::vector<Unit*>);
+	
 	friend class FlockingSteering;
 protected:
 	virtual Steering* getSteering();
+	virtual void setNeighborhood(std::vector<Unit*>);
 private:
 	Vector2D getNeighbourhoodCenter();
 	std::vector<Unit*> mLocalUnits;

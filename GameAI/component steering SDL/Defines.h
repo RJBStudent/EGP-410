@@ -24,6 +24,7 @@ const double WANDER_RADIUS = 100;
 const double WANDER_RATE = 6.2831854;
 const double WANDER_ORIENTATION = 0;
 const double CHASE_RADIUS = 150;
+const double GROUPING_RADIUS = 200;
 
 #define MESSAGE_MANAGER gpGame->getMessageManager()
 #define GRAPHICS_SYSTEM gpGame->getGraphicsSystem()

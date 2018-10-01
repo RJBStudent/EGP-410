@@ -27,12 +27,17 @@ Steering* GroupAlignmentSteering::getSteering()
 {
 	Unit* pOwner = gpGame->getUnitManager()->getUnit(mOwnerID);
 	PhysicsData data = pOwner->getPhysicsComponent()->getData();
-	Vector2D targetVel = getNeighbourhoodAverageVel();
-	data.vel = targetVel - data.vel;
-	if (data.vel.getLength > data.maxAccMagnitude*data.maxAccMagnitude)
+	if(mLocalUnits.size() <= 0)
 	{
-		data.vel.normalize();
-		data.vel *= data.maxAccMagnitude;
+		return this;
+	}
+	Vector2D targetVel = getNeighbourhoodAverageVel();
+	
+	data.acc = targetVel - data.acc;
+	if (data.acc.getLength() > data.maxAccMagnitude*data.maxAccMagnitude)
+	{
+		data.acc.normalize();
+		data.acc *= data.maxAccMagnitude;
 	}
 	this->mData = data;
 	return this;
@@ -47,4 +52,5 @@ Vector2D GroupAlignmentSteering::getNeighbourhoodAverageVel()
 		centerVel += mLocalUnits.at(i)->getPhysicsComponent()->getVelocity();
 	}
 	centerVel *= (1 / mLocalUnits.size());
+	return centerVel;
 }

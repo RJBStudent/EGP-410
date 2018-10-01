@@ -8,6 +8,7 @@ SeperationSteering::SeperationSteering(const UnitID& ownerID, std::vector<Unit*>
 {
 	mType = Steering::SEPERATION;
 	mOwnerID = ownerID;
+	mpFlee = new SeekSteering(mOwnerID, ZERO_VECTOR2D, INVALID_UNIT_ID, true);
 }
 
 SeperationSteering::~SeperationSteering()
@@ -37,8 +38,8 @@ Steering* SeperationSteering::getSteering()
 
 	target = getNeighbourhoodCenter();
 
-	mpFlee->setTargetLoc = target;
-	mpFlee->setOwnerID = mOwnerID;
+	mpFlee->setTargetLoc(target);
+	mpFlee->setOwnerID(mOwnerID);
 	data = mpFlee->getSteering()->getData();
 
 	this->mData = data;

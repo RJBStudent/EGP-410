@@ -16,7 +16,9 @@ public:
 class FlockingSteering : public Steering
 {
 public:
-	FlockingSteering(const UnitID& ownerID, const float groupRadius = 0);
+	FlockingSteering(const UnitID& ownerID, const float groupRadius = 0, const float theTargetRadians = 0, const float theSlowRadians = 0, const float theTimeToTarget = 0,
+		const float theWanderOffset = 0, const float theWanderRadius = 0, const float theWanderRate = 0,
+		const float theWanderOrientation = 0, const UnitID& targetID = INVALID_UNIT_ID);
 	~FlockingSteering();
 	std::vector<Unit*> createNeighborhood();
 protected:

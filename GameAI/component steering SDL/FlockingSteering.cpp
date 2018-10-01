@@ -2,15 +2,28 @@
 #include "SeperationSteering.h"
 #include "CohesionSteering.h"
 #include "GroupAlignmentSteering.h"
+#include "WanderSteering.h"
 #include "Steering.h"
 #include "Game.h"
 #include "UnitManager.h"
 
-FlockingSteering::FlockingSteering(const UnitID& ownerID, const float groupRadius)
+FlockingSteering::FlockingSteering(const UnitID& ownerID, const float groupRadius, const float theTargetRadians, const float theSlowRadians,
+	const float theTimeToTarget, const float theWanderOffset, const float theWanderRadius, const float theWanderRate,
+	const float theWanderOrientation, const UnitID& targetID)
 {
-	mOwnerID = ownerID;
+	mType = Steering::FLOCKING;
+	setOwnerID(ownerID);
+	setTargetID(targetID);
+	setTargetRadians(theTargetRadians);
+	setSlowRadians(theSlowRadians);
+	setWanderOffset(theWanderOffset);
+	setWanderRate(theWanderRate);
+	setWanderRadius(theWanderRadius);
+	setWanderOrientation(theWanderOrientation);
+	setTimeToTarget(theTimeToTarget);
 	mGroupingRadius = groupRadius;
 	std::vector<Unit*> tempList = createNeighborhood();
+	mBlendedSteeringList.push_back(BehaviorAndWeight(new WanderSteering(mOwnerID, mTargetRadians, mSlowRadians, mTimeToTarget, mWanderOffset, mWanderRadius, mWanderRate, mWanderOrientation), 0.5));
 	mBlendedSteeringList.push_back(BehaviorAndWeight(new SeperationSteering(mOwnerID, tempList) , .5));
 	mBlendedSteeringList.push_back(BehaviorAndWeight(new CohesionSteering(mOwnerID, tempList), .5));
 	mBlendedSteeringList.push_back(BehaviorAndWeight(new GroupAlignmentSteering(mOwnerID, tempList), .5));
@@ -32,19 +45,22 @@ Steering* FlockingSteering::getSteering()
 	PhysicsData playerData = pOwner->getPhysicsComponent()->getData();
 	PhysicsData tempData;
 	float totalWeight = 0;
+	std::vector<Unit*> tempList = createNeighborhood();
 	for (std::vector<BehaviorAndWeight>::iterator iter = mBlendedSteeringList.begin(); iter != mBlendedSteeringList.end(); iter++)
 	{
+		iter->mSteeringType->setNeighbourhood(tempList);
 		tempData = iter->mSteeringType->getSteering()->getData();
-		playerData.vel += tempData.vel * iter->mWeight;
-		playerData.rotVel += tempData.rotVel * iter->mWeight;
+		playerData.acc += tempData.acc * iter->mWeight;
+		playerData.rotAcc += tempData.rotAcc * iter->mWeight;
 
 		totalWeight += iter->mWeight;
+		this->mData = playerData;
 	}
 	if (totalWeight > 0)
 	{
 		totalWeight = (1 / totalWeight);
-		playerData.vel *= totalWeight;
-		playerData.rotVel *= totalWeight;
+		playerData.acc *= totalWeight;
+		playerData.rotAcc *= totalWeight;
 	}
 	this->mData = playerData;
 	return this;
@@ -59,10 +75,15 @@ std::vector<Unit*> FlockingSteering::createNeighborhood()
 	Vector2D distance;
 	for (std::map<UnitID, Unit*>::iterator iter = unitMap.begin(); iter != unitMap.end(); iter++)
 	{
+		if (iter->second->getPositionComponent()->getID() == mOwnerID)
+		{
+			continue;
+		}
 		distance = iter->second->getPositionComponent()->getPosition() - pOwner->getPositionComponent()->getPosition();
 		if (distance.getLength() < mGroupingRadius)
 		{
 			localUnits.push_back(iter->second);
 		}
 	}
+	return localUnits;
 }
