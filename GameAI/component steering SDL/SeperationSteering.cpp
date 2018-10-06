@@ -17,7 +17,7 @@ SeperationSteering::~SeperationSteering()
 	delete mpFlee;
 }
 
-void SeperationSteering::setNeighborhood(std::vector<Unit*> neighbourhood)
+void SeperationSteering::setNeighbourhood(std::vector<Unit*> neighbourhood)
 {
 	if (mLocalUnits.size() > 0)
 	{
@@ -38,9 +38,10 @@ Steering* SeperationSteering::getSteering()
 
 	target = getNeighbourhoodCenter();
 
-	mpFlee->setTargetLoc(target);
-	mpFlee->setOwnerID(mOwnerID);
-	data = mpFlee->getSteering()->getData();
+	Vector2D newTarget = target - pOwner->getPositionComponent()->getPosition();
+	newTarget *= -1;
+	newTarget.normalize();
+	data.acc = newTarget * data.maxAccMagnitude;
 
 	this->mData = data;
 	return this;
@@ -53,6 +54,7 @@ Vector2D SeperationSteering::getNeighbourhoodCenter()
 	{
 		center += mLocalUnits.at(i)->getPositionComponent()->getPosition();
 	}
-	center *= (1 / mLocalUnits.size());
+	center.setX(center.getX() * (1 / mLocalUnits.size()));
+	center.setY(center.getY() *(1 / mLocalUnits.size()));
 	return center;
 }

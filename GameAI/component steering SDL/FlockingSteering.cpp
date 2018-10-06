@@ -23,10 +23,10 @@ FlockingSteering::FlockingSteering(const UnitID& ownerID, const float groupRadiu
 	setTimeToTarget(theTimeToTarget);
 	mGroupingRadius = groupRadius;
 	std::vector<Unit*> tempList = createNeighborhood();
-	mBlendedSteeringList.push_back(BehaviorAndWeight(new WanderSteering(mOwnerID, mTargetRadians, mSlowRadians, mTimeToTarget, mWanderOffset, mWanderRadius, mWanderRate, mWanderOrientation), 0.5));
-	mBlendedSteeringList.push_back(BehaviorAndWeight(new SeperationSteering(mOwnerID, tempList) , .5));
+	mBlendedSteeringList.push_back(BehaviorAndWeight(new WanderSteering(mOwnerID, mTargetRadians, mSlowRadians, mTimeToTarget, mWanderOffset, mWanderRadius, mWanderRate, mWanderOrientation), .5));
+	mBlendedSteeringList.push_back(BehaviorAndWeight(new SeperationSteering(mOwnerID, tempList) , .1));
 	mBlendedSteeringList.push_back(BehaviorAndWeight(new CohesionSteering(mOwnerID, tempList), .5));
-	mBlendedSteeringList.push_back(BehaviorAndWeight(new GroupAlignmentSteering(mOwnerID, tempList), .5));
+	mBlendedSteeringList.push_back(BehaviorAndWeight(new GroupAlignmentSteering(mOwnerID, tempList), .4));
 
 }
 
@@ -46,7 +46,13 @@ Steering* FlockingSteering::getSteering()
 	PhysicsData tempData;
 	float totalWeight = 0;
 	std::vector<Unit*> tempList = createNeighborhood();
-	for (std::vector<BehaviorAndWeight>::iterator iter = mBlendedSteeringList.begin(); iter != mBlendedSteeringList.end(); iter++)
+	//wander First
+	tempData = mBlendedSteeringList.begin()->mSteeringType->getSteering()->getData();
+	playerData.acc += tempData.acc;
+	playerData.rotAcc += tempData.rotAcc;
+	this->mData = playerData;
+	//Rest of the steering methods
+	for (std::vector<BehaviorAndWeight>::iterator iter = mBlendedSteeringList.begin()+1; iter != mBlendedSteeringList.end(); iter++)
 	{
 		iter->mSteeringType->setNeighbourhood(tempList);
 		tempData = iter->mSteeringType->getSteering()->getData();

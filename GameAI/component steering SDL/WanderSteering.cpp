@@ -50,7 +50,6 @@ Steering* WanderSteering::getSteering()
 	if (faceData)
 	{
 		data.rotAcc = faceData->getData().rotAcc;
-		std::cout << data.rotAcc << std::endl;
 	}
 
 	characterOrientationAsVector = Vector2D(cos(pOwner->getPositionComponent()->getFacing()), sin(pOwner->getPositionComponent()->getFacing()));

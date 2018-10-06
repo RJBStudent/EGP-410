@@ -11,6 +11,7 @@ public:
 		const float theTimeToTarget = 0, const UnitID& targetID = INVALID_UNIT_ID);
 	friend class ArriveAndFaceSteering;
 	friend class WanderSteering;
+	friend class GroupAlignmentSteering;
 protected:
 	virtual Steering* getSteering();
 };

@@ -15,7 +15,7 @@ public:
 	friend class FlockingSteering;
 protected:
 	virtual Steering* getSteering();
-	virtual void setNeighborhood(std::vector<Unit*>);
+	virtual void setNeighbourhood(std::vector<Unit*>  neighbourhood);
 private:
 
 	Vector2D getNeighbourhoodCenter();

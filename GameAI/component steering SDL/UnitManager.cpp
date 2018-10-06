@@ -64,7 +64,7 @@ Unit* UnitManager::createPlayerUnit(const Sprite& sprite, bool shouldWrap /*= tr
 }
 
 
-Unit* UnitManager::createRandomUnit(const Sprite& sprite)
+Unit* UnitManager::createRandomUnit(const Sprite& sprite) 
 {
 
 	int posX = rand() % gpGame->getGraphicsSystem()->getWidth();

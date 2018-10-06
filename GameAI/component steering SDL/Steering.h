@@ -73,5 +73,5 @@ protected:
 	float mChaseRadius;
 
 	virtual Steering* getSteering() { return this; };//overridden by sub-classes
-	virtual void setNeighbourhood(std::vector<Unit*> list) {}
+	virtual void setNeighbourhood(std::vector<Unit*> neighbourhood) {}
 };

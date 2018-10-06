@@ -12,6 +12,7 @@ public:
 		const float theWanderOrientation = 0, const UnitID& targetID = INVALID_UNIT_ID);
 	~WanderSteering();
 	friend class WanderAndChaseSteering;
+	friend class GroupAlignmentSteering;
 protected:
 	virtual Steering* getSteering();
 private:

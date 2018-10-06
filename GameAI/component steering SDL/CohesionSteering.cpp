@@ -6,7 +6,7 @@
 CohesionSteering::CohesionSteering(const UnitID& ownerID, std::vector<Unit*> localUnits)
 {
 	mOwnerID = ownerID;
-	setNeighborhood(localUnits);
+	setNeighbourhood(localUnits);
 	mpSeek = new SeekSteering(mOwnerID, ZERO_VECTOR2D);
 }
 
@@ -17,7 +17,7 @@ CohesionSteering::~CohesionSteering()
 }
 
 
-void CohesionSteering::setNeighborhood(std::vector<Unit*> neighbourhood)
+void CohesionSteering::setNeighbourhood(std::vector<Unit*> neighbourhood)
 {
 	if (mLocalUnits.size() > 0)
 	{
@@ -37,10 +37,14 @@ Steering* CohesionSteering::getSteering()
 	}
 
 	target = getNeighbourhoodCenter();
-
+	/*
 	mpSeek->setTargetLoc(target);
 	mpSeek->setOwnerID(mOwnerID);
 	data = mpSeek->getSteering()->getData();
+	*/
+	Vector2D newTarget = target - pOwner->getPositionComponent()->getPosition();
+	newTarget.normalize();
+	data.acc = newTarget * data.maxAccMagnitude;
 
 	this->mData = data;
 	return this;
@@ -54,6 +58,8 @@ Vector2D CohesionSteering::getNeighbourhoodCenter()
 	{
 		center += mLocalUnits.at(i)->getPositionComponent()->getPosition();
 	}
-	center *= (1 / mLocalUnits.size());
+	center.setX(center.getX() * (1 / mLocalUnits.size()));
+	center.setY(center.getY() *(1 / mLocalUnits.size()));
+
 	return center;
 }
