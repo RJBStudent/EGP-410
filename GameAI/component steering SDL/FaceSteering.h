@@ -12,6 +12,7 @@ public:
 	friend class ArriveAndFaceSteering;
 	friend class WanderSteering;
 	friend class GroupAlignmentSteering;
+	friend class FlockingSteering;
 protected:
 	virtual Steering* getSteering();
 };

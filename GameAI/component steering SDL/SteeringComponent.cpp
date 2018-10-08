@@ -87,7 +87,7 @@ void SteeringComponent::setData(const SteeringData& data)
 	case Steering::FLOCKING:
 	{
 		delete mpSteering;
-		mpSteering = new FlockingSteering(data.ownerID,data.groupRadius, data.targetRadians, data.slowRadians, data.timeToTarget, data.wanderOffset, data.wanderRadius, data.wanderRate, data.wanderOrientation, data.chaseRadius);
+		mpSteering = new FlockingSteering(data.ownerID, data.targetRadians, data.slowRadians, data.timeToTarget, data.wanderOffset, data.wanderRadius, data.wanderRate, data.wanderOrientation, data.chaseRadius);
 		break;
 	}/*
 	case Steering::COHESION:

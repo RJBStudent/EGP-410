@@ -5,6 +5,7 @@
 #include "Game.h"
 #include "ComponentManager.h"
 #include "GraphicsSystem.h"
+#include "DataParser.h"
 
 UnitID UnitManager::msNextUnitID = PLAYER_UNIT_ID + 1;
 
@@ -13,6 +14,14 @@ using namespace std;
 UnitManager::UnitManager(Uint32 maxSize)
 	:mPool(maxSize, sizeof(Unit))
 {
+	mCohesionWeight = gpGame->getDataParser()->ReadFile("Cohesion");
+	mSeperationWeight = gpGame->getDataParser()->ReadFile("Seperation");
+	mAlignmentWeight = gpGame->getDataParser()->ReadFile("Alignment");
+}
+
+UnitManager::~UnitManager()
+{
+	gpGame->getDataParser()->WriteToKey(mCohesionWeight, mSeperationWeight, mAlignmentWeight);
 }
 
 Unit* UnitManager::createUnit(const Sprite& sprite, bool shouldWrap, const PositionData& posData /*= ZERO_POSITION_DATA*/, const PhysicsData& physicsData /*= ZERO_PHYSICS_DATA*/, const UnitID& id)
@@ -40,7 +49,7 @@ Unit* UnitManager::createUnit(const Sprite& sprite, bool shouldWrap, const Posit
 
 		//create some components
 		ComponentManager* pComponentManager = gpGame->getComponentManager();
-		ComponentID id = pComponentManager->allocatePositionComponent(posData,shouldWrap);
+		ComponentID id = pComponentManager->allocatePositionComponent(posData, shouldWrap);
 		pUnit->mPositionComponentID = id;
 		pUnit->mpPositionComponent = pComponentManager->getPositionComponent(id);
 		pUnit->mPhysicsComponentID = pComponentManager->allocatePhysicsComponent(pUnit->mPositionComponentID, physicsData);
@@ -64,22 +73,51 @@ Unit* UnitManager::createPlayerUnit(const Sprite& sprite, bool shouldWrap /*= tr
 }
 
 
-Unit* UnitManager::createRandomUnit(const Sprite& sprite) 
+Unit* UnitManager::createRandomUnit(const Sprite& sprite, Vector2D randomPoint)
 {
 
-	int posX = rand() % gpGame->getGraphicsSystem()->getWidth();
-	int posY = rand() % gpGame->getGraphicsSystem()->getHeight();
+	int posX = (rand() % gpGame->getGraphicsSystem()->getWidth()) % 100 + randomPoint.getX();
+	int posY = (rand() % gpGame->getGraphicsSystem()->getHeight()) % 100 + randomPoint.getY();
 	int velX = rand() % 50 - 25;
 	int velY = rand() % 40 - 20;
 	float ori = fmod((double)rand(), 3.14);
 
+	if (mUnitMap.size() >= 1)
+	{
+		Uint32 target = 1;
+		for (auto it = mUnitMap.begin(); it != mUnitMap.end(); ++it, target++)
+		{
+			if (it->second)
+			{
+				target = it->first;
+				break;
+			}
+		}
 
-	Unit* pUnit = createUnit(sprite, true, PositionData(Vector2D(posX,posY),ori), PhysicsData(Vector2D(velX,velY),ZERO_VECTOR2D, 0, 0));
+		float cohesion = mUnitMap.at(target)->getSteeringComponent()->getSteering()->GetCohesionWeight();
+		float seperation = mUnitMap.at(target)->getSteeringComponent()->getSteering()->GetSeperationWeight();
+		float alignment = mUnitMap.at(target)->getSteeringComponent()->getSteering()->GetAlignmentWeight();
+
+		if (mCohesionWeight != cohesion)
+			mCohesionWeight = cohesion;
+
+		if (mSeperationWeight != seperation)
+			mSeperationWeight = seperation;
+
+		if (mAlignmentWeight != alignment)
+			mAlignmentWeight = alignment;
+	}
+
+	Unit* pUnit = createUnit(sprite, true, PositionData(Vector2D(posX, posY), ori), PhysicsData(Vector2D(velX, velY), ZERO_VECTOR2D, 0, 0));
 	if (pUnit != NULL)
 	{
 		//pUnit->setSteering(Steering::SEEK, Vector2D(rand() % gpGame->getGraphicsSystem()->getWidth(), rand() % gpGame->getGraphicsSystem()->getHeight()));
 		//pUnit->setSteering(Steering::SEEK, Vector2D(gpGame->getGraphicsSystem()->getWidth()/2, gpGame->getGraphicsSystem()->getHeight()/2));
-		pUnit->setSteering(Steering::FLOCKING, ZERO_VECTOR2D, TARGET_RADIUS, SLOW_RADIUS, TIME_TO_TARGET, TARGET_RADIANS, SLOW_RADIANS, WANDER_OFFSET, WANDER_RADIUS, WANDER_RATE, WANDER_ORIENTATION, CHASE_RADIUS, GROUPING_RADIUS);
+		pUnit->setSteering(Steering::FLOCKING, ZERO_VECTOR2D, SLOW_RADIUS, TIME_TO_TARGET, TARGET_RADIANS, SLOW_RADIANS, WANDER_OFFSET, WANDER_RADIUS, WANDER_RATE, WANDER_ORIENTATION, CHASE_RADIUS, GROUPING_RADIUS);
+		pUnit->getSteeringComponent()->getSteering()->SetCohesionWeight(mCohesionWeight);
+		pUnit->getSteeringComponent()->getSteering()->SetSeperationWeight(mSeperationWeight);
+		pUnit->getSteeringComponent()->getSteering()->SetAlignmentWeight(mAlignmentWeight);
+
 	}
 	return pUnit;
 }
@@ -126,10 +164,10 @@ void UnitManager::deleteRandomUnit()
 	if (mUnitMap.size() >= 1)
 	{
 		Uint32 target = rand() % mUnitMap.size();
-		if (target == 0)//don't allow the 0th element to be deleted as it is the player unit
-		{
-			target = 1;
-		}
+		//if (target == 0)//don't allow the 0th element to be deleted as it is the player unit
+		//{
+		//	target = 1;
+		//}
 		Uint32 cnt = 0;
 		for (auto it = mUnitMap.begin(); it != mUnitMap.end(); ++it, cnt++)
 		{
@@ -158,3 +196,66 @@ void UnitManager::updateAll(float elapsedTime)
 	}
 }
 
+void UnitManager::IncreaseAllSeperation()
+{
+	for (auto it = mUnitMap.begin(); it != mUnitMap.end(); ++it)
+	{
+		if (it->second->getSteeringComponent()->getType() == Steering::FLOCKING)
+		{
+			it->second->getSteeringComponent()->getSteering()->IncreaseSeperation();
+		}
+	}
+}
+void UnitManager::DecreaseAllSeperation()
+{
+	for (auto it = mUnitMap.begin(); it != mUnitMap.end(); ++it)
+	{
+		if (it->second->getSteeringComponent()->getType() == Steering::FLOCKING)
+		{
+			it->second->getSteeringComponent()->getSteering()->DecreaseSeperation();
+		}
+	}
+}
+
+void UnitManager::DecreaseAllCohesion()
+{
+	for (auto it = mUnitMap.begin(); it != mUnitMap.end(); ++it)
+	{
+		if (it->second->getSteeringComponent()->getType() == Steering::FLOCKING)
+		{
+			it->second->getSteeringComponent()->getSteering()->DecreaseCohesion();
+		}
+	}
+}
+void UnitManager::IncreaseAllCohesion()
+{
+	for (auto it = mUnitMap.begin(); it != mUnitMap.end(); ++it)
+	{
+		if (it->second->getSteeringComponent()->getType() == Steering::FLOCKING)
+		{
+			it->second->getSteeringComponent()->getSteering()->IncreaseCohesion();
+		}
+	}
+}
+
+
+void UnitManager::DecreaseAllAlignment()
+{
+	for (auto it = mUnitMap.begin(); it != mUnitMap.end(); ++it)
+	{
+		if (it->second->getSteeringComponent()->getType() == Steering::FLOCKING)
+		{
+			it->second->getSteeringComponent()->getSteering()->DecreaseAlignment();
+		}
+	}
+}
+void UnitManager::IncreaseAllAlignment()
+{
+	for (auto it = mUnitMap.begin(); it != mUnitMap.end(); ++it)
+	{
+		if (it->second->getSteeringComponent()->getType() == Steering::FLOCKING)
+		{
+			it->second->getSteeringComponent()->getSteering()->IncreaseAlignment();
+		}
+	}
+}

@@ -55,6 +55,7 @@ public:
 	const PhysicsData& getData() const { return mData; };
 	void update();
 	friend class FlockingSteering;
+	friend class UnitManager;
 protected:
 	SteeringType mType;
 	Vector2D mTargetLoc;
@@ -74,4 +75,20 @@ protected:
 
 	virtual Steering* getSteering() { return this; };//overridden by sub-classes
 	virtual void setNeighbourhood(std::vector<Unit*> neighbourhood) {}
+	virtual void IncreaseCohesion() {}
+	virtual void DecreaseCohesion() {}
+	virtual void IncreaseSeperation() {}
+	virtual void DecreaseSeperation() {}
+	virtual void IncreaseAlignment() {}
+	virtual void DecreaseAlignment() {}
+
+
+	virtual void SetCohesionWeight(const float cohesion) {}
+	virtual void SetSeperationWeight(const float seperation) {}
+	virtual void SetAlignmentWeight(const float alignment) {}
+
+	virtual float GetCohesionWeight() const { return 0; }
+	virtual float GetSeperationWeight() const { return 0; }
+	virtual float GetAlignmentWeight() const { return 0; }
+
 };

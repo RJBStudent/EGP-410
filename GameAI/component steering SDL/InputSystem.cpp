@@ -6,6 +6,12 @@
 #include "DeleteRandomUnitMessage.h"
 #include "AddRandomUnitMessage.h"
 #include "CloseMessage.h"
+#include "IncreaseAlignmentWeightMessage.h"
+#include "IncreaseCohesionWeightMessage.h"
+#include "IncreaseSeperationWeightMessage.h"
+#include "DecreaseAlignmentWeightMessage.h"
+#include "DecreaseSeperationWeightMessage.h"
+#include "DecreaseCohesionWeightMessage.h"
 
 InputSystem::InputSystem()
 {
@@ -37,12 +43,12 @@ void InputSystem::cleanup()
 void InputSystem::update()
 {
 	keyInputUpdate();
-	mouseInputUpdate();
+	//mouseInputUpdate();
 	for (int i = 0; i < static_cast<int>(KeyCode::NUM_SCANCODES); i++)
 	{
 		if (mBitwiseKeyStates[i] || 0x0)
 		{
-			if (i == static_cast<int>(KeyCode::SCANCODE_RETURN) && getHasByte(mBitwiseKeyStates[i], StateBitValues::JUST_PRESSED))
+			if (i == static_cast<int>(KeyCode::SCANCODE_A) && getHasByte(mBitwiseKeyStates[i], StateBitValues::JUST_PRESSED))
 			{
 				GameMessage* pMessage = new AddRandomUnitMessage();
 				MESSAGE_MANAGER->addMessage(pMessage, 0);
@@ -50,6 +56,36 @@ void InputSystem::update()
 			else if (i == static_cast<int>(KeyCode::SCANCODE_D) && getHasByte(mBitwiseKeyStates[i], StateBitValues::JUST_PRESSED))
 			{
 				GameMessage* pMessage = new DeleteRandomUnitMessage();
+				MESSAGE_MANAGER->addMessage(pMessage, 0);
+			}
+			else if (i == static_cast<int>(KeyCode::SCANCODE_U) && getHasByte(mBitwiseKeyStates[i], StateBitValues::JUST_PRESSED))
+			{
+				GameMessage* pMessage = new IncreaseSeperationWeightMessage();
+				MESSAGE_MANAGER->addMessage(pMessage, 0);
+			}
+			else if (i == static_cast<int>(KeyCode::SCANCODE_J) && getHasByte(mBitwiseKeyStates[i], StateBitValues::JUST_PRESSED))
+			{
+				GameMessage* pMessage = new DecreaseSeperationWeightMessage();
+				MESSAGE_MANAGER->addMessage(pMessage, 0);
+			}
+			else if (i == static_cast<int>(KeyCode::SCANCODE_I) && getHasByte(mBitwiseKeyStates[i], StateBitValues::JUST_PRESSED))
+			{
+				GameMessage* pMessage = new IncreaseCohesionWeightMessage();
+				MESSAGE_MANAGER->addMessage(pMessage, 0);
+			}
+			else if (i == static_cast<int>(KeyCode::SCANCODE_K) && getHasByte(mBitwiseKeyStates[i], StateBitValues::JUST_PRESSED))
+			{
+				GameMessage* pMessage = new DecreaseCohesionWeightMessage();
+				MESSAGE_MANAGER->addMessage(pMessage, 0);
+			}
+			else if (i == static_cast<int>(KeyCode::SCANCODE_O) && getHasByte(mBitwiseKeyStates[i], StateBitValues::JUST_PRESSED))
+			{
+				GameMessage* pMessage = new IncreaseAlignmentWeightMessage();
+				MESSAGE_MANAGER->addMessage(pMessage, 0);
+			}
+			else if (i == static_cast<int>(KeyCode::SCANCODE_L) && getHasByte(mBitwiseKeyStates[i], StateBitValues::JUST_PRESSED))
+			{
+				GameMessage* pMessage = new DecreaseAlignmentWeightMessage();
 				MESSAGE_MANAGER->addMessage(pMessage, 0);
 			}
 			else if(i == static_cast<int>(KeyCode::SCANCODE_ESCAPE) && getHasByte(mBitwiseKeyStates[i], StateBitValues::CURRENTLY_PRESSED))

@@ -44,6 +44,7 @@ Steering* CohesionSteering::getSteering()
 	*/
 	Vector2D newTarget = target - pOwner->getPositionComponent()->getPosition();
 	newTarget.normalize();
+	//newTarget += pOwner->getPositionComponent()->getPosition();
 	data.acc = newTarget * data.maxAccMagnitude;
 
 	this->mData = data;
@@ -58,8 +59,9 @@ Vector2D CohesionSteering::getNeighbourhoodCenter()
 	{
 		center += mLocalUnits.at(i)->getPositionComponent()->getPosition();
 	}
-	center.setX(center.getX() * (1 / mLocalUnits.size()));
-	center.setY(center.getY() *(1 / mLocalUnits.size()));
+
+	center.setX(center.getX() /mLocalUnits.size());
+	center.setY(center.getY() / mLocalUnits.size());
 
 	return center;
 }

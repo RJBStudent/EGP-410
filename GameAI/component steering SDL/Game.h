@@ -16,6 +16,7 @@ class Timer;
 class ComponentManager;
 class UnitManager;
 class InputSystem;
+class DataParser;
 
 const IDType BACKGROUND_SPRITE_ID = 0;
 const IDType PLAYER_ICON_SPRITE_ID = 1;
@@ -49,6 +50,7 @@ public:
 	inline InputSystem* getInputSystem() const { return mpInputSystem; }
 
 	inline void setShouldExit(bool shouldExit) { mShouldExit = shouldExit; };
+	inline DataParser* getDataParser() const { return mpDataParser; }
 
 private:
 	GraphicsSystem* mpGraphicsSystem;
@@ -61,6 +63,7 @@ private:
 	Font* mpFont;
 	Timer* mpLoopTimer;
 	Timer* mpMasterTimer;
+	DataParser* mpDataParser;
 	bool mShouldExit;
 
 	//should be somewhere else

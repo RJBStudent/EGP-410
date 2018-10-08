@@ -18,6 +18,7 @@
 #include "UnitManager.h"
 #include "InputSystem.h"
 #include <time.h>
+#include "DataParser.h"
 
 Game* gpGame = NULL;
 
@@ -57,6 +58,7 @@ bool Game::init()
 
 	//create and init GraphicsSystem
 	mpGraphicsSystem = new GraphicsSystem();
+	mpDataParser = new DataParser(FILE_NAME);
 	bool goodGraphics = mpGraphicsSystem->init( WIDTH, HEIGHT );
 	if(!goodGraphics) 
 	{
@@ -154,6 +156,8 @@ void Game::cleanup()
 	mpComponentManager = NULL;
 	delete mpInputSystem;
 	mpInputSystem = NULL;
+	delete mpDataParser;
+	mpDataParser = NULL;
 
 }
 

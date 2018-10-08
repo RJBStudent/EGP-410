@@ -1,0 +1,3 @@
+Cohesion (4)
+Seperation (13)
+Alignment (10)

@@ -20,15 +20,23 @@ class UnitManager : public Trackable
 {
 public:
 	UnitManager(Uint32 maxSize);
-	~UnitManager(){};
+	~UnitManager();
 
 	Unit* createUnit(const Sprite& sprite, bool shouldWrap = true, const PositionData& posData = ZERO_POSITION_DATA, const PhysicsData& physicsData = ZERO_PHYSICS_DATA, const UnitID& id = INVALID_UNIT_ID);
 	Unit* createPlayerUnit(const Sprite& sprite, bool shouldWrap = true, const PositionData& posData = ZERO_POSITION_DATA, const PhysicsData& physicsData = ZERO_PHYSICS_DATA);
-	Unit* createRandomUnit(const Sprite& sprite);
+	Unit* createRandomUnit(const Sprite& sprite, Vector2D randomPoint);
 
 	Unit* getUnit(const UnitID& id) const;
 	void deleteUnit(const UnitID& id);
 	void deleteRandomUnit();
+
+	void IncreaseAllSeperation();
+	void IncreaseAllCohesion();
+	void IncreaseAllAlignment();
+	void DecreaseAllSeperation();
+	void DecreaseAllCohesion();
+	void DecreaseAllAlignment();
+
 
 	void drawAll() const;
 	void updateAll(float elapsedTime);
@@ -40,5 +48,9 @@ private:
 	static UnitID msNextUnitID;
 	MemoryPool mPool;
 	std::map<UnitID, Unit*> mUnitMap;
+
+	float mCohesionWeight;
+	float mSeperationWeight;
+	float mAlignmentWeight;
 };
 

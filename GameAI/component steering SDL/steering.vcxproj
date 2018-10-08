@@ -19,6 +19,10 @@
     <ClInclude Include="Color.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="ComponentManager.h" />
+    <ClInclude Include="DataParser.h" />
+    <ClInclude Include="DecreaseAlignmentWeightMessage.h" />
+    <ClInclude Include="DecreaseCohesionWeightMessage.h" />
+    <ClInclude Include="DecreaseSeperationWeightMessage.h" />
     <ClInclude Include="Defines.h" />
     <ClInclude Include="DeleteRandomUnitMessage.h" />
     <ClInclude Include="FaceSteering.h" />
@@ -31,6 +35,9 @@
     <ClInclude Include="GraphicsBufferManager.h" />
     <ClInclude Include="GraphicsSystem.h" />
     <ClInclude Include="GroupAlignmentSteering.h" />
+    <ClInclude Include="IncreaseAlignmentWeightMessage.h" />
+    <ClInclude Include="IncreaseCohesionWeightMessage.h" />
+    <ClInclude Include="IncreaseSeperationWeightMessage.h" />
     <ClInclude Include="InputSystem.h" />
     <ClInclude Include="KeyboardInputs.h" />
     <ClInclude Include="PhysicsComponent.h" />
@@ -57,6 +64,10 @@
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="ComponentManager.cpp" />
+    <ClCompile Include="DataParser.cpp" />
+    <ClCompile Include="DecreaseAlignmentWeightMessage.cpp" />
+    <ClCompile Include="DecreaseCohesionWeightMessage.cpp" />
+    <ClCompile Include="DecreaseSeperationWeightMessage.cpp" />
     <ClCompile Include="DeleteRandomUnitMessage.cpp" />
     <ClCompile Include="FaceSteering.cpp" />
     <ClCompile Include="FlockingSteering.cpp" />
@@ -68,6 +79,9 @@
     <ClCompile Include="GraphicsBufferManager.cpp" />
     <ClCompile Include="GraphicsSystem.cpp" />
     <ClCompile Include="GroupAlignmentSteering.cpp" />
+    <ClCompile Include="IncreaseAlignmentWeightMessage.cpp" />
+    <ClCompile Include="IncreaseCohesionWeightMessage.cpp" />
+    <ClCompile Include="IncreaseSeperationWeightMessage.cpp" />
     <ClCompile Include="InputSystem.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PhysicsComponent.cpp" />

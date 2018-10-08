@@ -34,32 +34,33 @@ Steering* GroupAlignmentSteering::getSteering()
 	{
 		return this;
 	}
-
+/*
 	float averageRot = getNeighbourhoodAverageDirection();
-	Vector2D targetVel = Vector2D(cos(averageRot), sin(averageRot));
+	Vector2D targetRot = Vector2D(cos(averageRot), sin(averageRot));
+	*/
+	
 
-	//Vector2D targetVel = getNeighbourhoodAverageVel();
-	//targetVel.normalize();
-	mpFace->setTargetLoc(targetVel);
-	data.rotAcc = mpFace->getSteering()->getData().rotAcc;
-
+	Vector2D targetVel = getNeighbourhoodAverageVel();
+	targetVel.normalize();
+	data.acc = targetVel * data.maxAccMagnitude;
+	
 	this->mData = data;
 	return this;
 }
-
-float GroupAlignmentSteering::getNeighbourhoodAverageDirection()
-{
-	float centerVel = 0;
-	int i;
-	for (i = 0; i < mLocalUnits.size(); i++)
-	{
-		centerVel += mLocalUnits.at(i)->getPositionComponent()->getFacing();
-	}
-	centerVel += gpGame->getUnitManager()->getUnit(mOwnerID)->getPositionComponent()->getFacing();
-
-	centerVel /= i + 1;
-	return centerVel;
-}
+//
+//float GroupAlignmentSteering::getNeighbourhoodAverageDirection()
+//{
+//	float centerVel = 0;
+//	int i;
+//	for (i = 0; i < mLocalUnits.size(); i++)
+//	{
+//		centerVel += mLocalUnits.at(i)->getPhysicsComponent()->getRotationalVelocity();
+//	}
+//	centerVel += gpGame->getUnitManager()->getUnit(mOwnerID)->getPhysicsComponent()->getRotationalVelocity();
+//
+//	centerVel /= i + 1;
+//	return centerVel;
+//}
 
 
 Vector2D GroupAlignmentSteering::getNeighbourhoodAverageVel()
@@ -68,13 +69,13 @@ Vector2D GroupAlignmentSteering::getNeighbourhoodAverageVel()
 	int i;
 	for (i = 0; i < mLocalUnits.size(); i++)
 	{
-		centerVel += mLocalUnits.at(i)->getPhysicsComponent()->getVelocity();
+		centerVel += mLocalUnits.at(i)->getPhysicsComponent()->getData().vel;
 	}
 	if (i == 0)
 	{
 		return ZERO_VECTOR2D;
 	}
-	centerVel += gpGame->getUnitManager()->getUnit(mOwnerID)->getPositionComponent()->getPosition();
+	centerVel += gpGame->getUnitManager()->getUnit(mOwnerID)->getPhysicsComponent()->getData().vel;
 	centerVel.setX(centerVel.getX() / i + 1);
 	centerVel.setY(centerVel.getY() / i + 1);
 	return centerVel;
