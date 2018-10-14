@@ -18,6 +18,7 @@ class GraphicsBufferManager;
 class SpriteManager;
 class Game;
 class Font;
+class InputSystem;
 
 extern PerformanceTracker* gpPerformanceTracker;
 extern Game* gpGame;
@@ -50,6 +51,7 @@ protected:
 	GraphicsSystem* mpGraphicsSystem;
 	GraphicsBufferManager* mpGraphicsBufferManager;
 	SpriteManager* mpSpriteManager;
+	InputSystem* mpInputSystem;
 	Timer* mpLoopTimer;
 	Timer* mpMasterTimer;
 	float mLoopTargetTime;

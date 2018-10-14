@@ -114,6 +114,15 @@
     <ClInclude Include="DijkstraPathfinding.h">
       <Filter>Header Files\pathfinding</Filter>
     </ClInclude>
+    <ClInclude Include="InputSystem.h">
+      <Filter>Common\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyboardInputs.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CloseMessage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\common\Game.cpp">
@@ -199,6 +208,9 @@
     </ClCompile>
     <ClCompile Include="DijkstraPathfinding.cpp">
       <Filter>Source Files\pathfinding</Filter>
+    </ClCompile>
+    <ClCompile Include="InputSystem.cpp">
+      <Filter>Common\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

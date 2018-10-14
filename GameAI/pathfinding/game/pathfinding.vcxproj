@@ -92,6 +92,7 @@
     <ClInclude Include="..\common\Sprite.h" />
     <ClInclude Include="..\common\SpriteManager.h" />
     <ClInclude Include="AStarPathfinding.h" />
+    <ClInclude Include="CloseMessage.h" />
     <ClInclude Include="Connection.h" />
     <ClInclude Include="DebugContent.h" />
     <ClInclude Include="DebugDisplay.h" />
@@ -103,6 +104,8 @@
     <ClInclude Include="Graph.h" />
     <ClInclude Include="GridGraph.h" />
     <ClInclude Include="GridPathfinder.h" />
+    <ClInclude Include="InputSystem.h" />
+    <ClInclude Include="KeyboardInputs.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="Path.h" />
     <ClInclude Include="Pathfinder.h" />
@@ -132,6 +135,7 @@
     <ClCompile Include="Graph.cpp" />
     <ClCompile Include="GridGraph.cpp" />
     <ClCompile Include="GridPathfinder.cpp" />
+    <ClCompile Include="InputSystem.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="Path.cpp" />

@@ -18,6 +18,7 @@
 #include "GridVisualizer.h"
 #include "DebugDisplay.h"
 #include "PathfindingDebugContent.h"
+#include "InputSystem.h"
 
 #include <SDL.h>
 #include <fstream>
@@ -78,6 +79,8 @@ bool GameApp::init()
 	PathfindingDebugContent* pContent = new PathfindingDebugContent( mpPathfinder );
 	mpDebugDisplay = new DebugDisplay( Vector2D(0,12), pContent );
 
+	mpInputSystem = new InputSystem();
+
 	mpMasterTimer->start();
 	return true;
 }
@@ -101,6 +104,9 @@ void GameApp::cleanup()
 
 	delete mpDebugDisplay;
 	mpDebugDisplay = NULL;
+
+	delete mpInputSystem;
+	mpInputSystem = NULL;
 }
 
 void GameApp::beginLoop()
@@ -130,7 +136,7 @@ void GameApp::processLoop()
 
 	if (SDL_GetMouseState(&x, &y) & SDL_BUTTON(SDL_BUTTON_LEFT))
 	{
-		Vector2D lastPos(0.0f, 0.0f);
+		static Vector2D lastPos(0.0f, 0.0f);
 		Vector2D pos(x,y);
 		if (lastPos.getX() != pos.getX() || lastPos.getY() != pos.getY())
 		{
