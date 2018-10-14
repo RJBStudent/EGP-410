@@ -125,6 +125,7 @@
     <ClCompile Include="..\common\Sprite.cpp" />
     <ClCompile Include="..\common\SpriteManager.cpp" />
     <ClCompile Include="AStarPathfinding.cpp" />
+    <ClCompile Include="CloseMessage.cpp" />
     <ClCompile Include="Connection.cpp" />
     <ClCompile Include="DebugDisplay.cpp" />
     <ClCompile Include="DepthFirstPathfinder.cpp" />

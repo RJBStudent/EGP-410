@@ -36,7 +36,9 @@ void InputSystem::cleanup()
 void InputSystem::update()
 {
 	keyInputUpdate();
-	//mouseInputUpdate();
+	GameApp* pGame = dynamic_cast<GameApp*>(gpGame);
+	mouseInputUpdate();
+	//int x, y;
 	for (int i = 0; i < static_cast<int>(KeyCode::NUM_SCANCODES); i++)
 	{
 		if (mBitwiseKeyStates[i] || 0x0)
@@ -44,7 +46,7 @@ void InputSystem::update()
 			 if(i == static_cast<int>(KeyCode::SCANCODE_ESCAPE) && getHasByte(mBitwiseKeyStates[i], StateBitValues::CURRENTLY_PRESSED))
 			{
 			GameMessage* pMessage = new CloseMessage();
-			MESSAGE_MANAGER->addMessage(pMessage, 0);
+			pGame->getMessageManager()->addMessage(pMessage, 0);
 			}
 		}
 
@@ -52,14 +54,16 @@ void InputSystem::update()
 	if (getHasByte(mLeftMouse, StateBitValues::CURRENTLY_PRESSED))
 	{
 		static Vector2D lastPos(0.0f, 0.0f);
-		Vector2D pos(x, y);
+		Vector2D pos(mMouseLocation.getX(), mMouseLocation.getY());
 		if (lastPos.getX() != pos.getX() || lastPos.getY() != pos.getY())
 		{
 			GameMessage* pMessage = new PathToMessage(lastPos, pos);
-			gpGame->->addMessage(pMessage, 0);
+			pGame->getMessageManager()->addMessage(pMessage, 0);
 			lastPos = pos;
 		}
 	}
+
+	SDL_PumpEvents();
 
 	//EventSystem::getInstance()->fireEvent(MouseKeyEvent(mRightMouse, mLeftMouse, mMouseLocation));
 

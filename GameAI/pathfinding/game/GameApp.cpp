@@ -131,33 +131,8 @@ void GameApp::processLoop()
 	mpMessageManager->processMessagesForThisframe();
 
 	//get input - should be moved someplace better
-	SDL_PumpEvents();
-	int x, y;
 
-	if (SDL_GetMouseState(&x, &y) & SDL_BUTTON(SDL_BUTTON_LEFT))
-	{
-		static Vector2D lastPos(0.0f, 0.0f);
-		Vector2D pos(x,y);
-		if (lastPos.getX() != pos.getX() || lastPos.getY() != pos.getY())
-		{
-			GameMessage* pMessage = new PathToMessage(lastPos, pos);
-			mpMessageManager->addMessage(pMessage, 0);
-			lastPos = pos;
-		}
-	}
-
-	//get input - should be moved someplace better
-	//all this should be moved to InputManager!!!
-	{
-		//get keyboard state
-		const Uint8 *state = SDL_GetKeyboardState(NULL);
-
-		//if escape key was down then exit the loop
-		if (state[SDL_SCANCODE_ESCAPE])
-		{
-			markForExit();
-		}
-	}
+	mpInputSystem->update();
 
 	//should be last thing in processLoop
 	Game::processLoop();
