@@ -24,6 +24,10 @@ private:
 	{
 		NodeRecord() : mpNode(NULL), mpConnection(NULL), mCostSoFar(0) {}
 		NodeRecord(Node* node, Connection* connection, int cost) : mpNode(node), mpConnection(connection), mCostSoFar(cost){}
+		~NodeRecord()
+		{
+			/*mpNode = NULL;  mpConnection = NULL;*/
+		}
 		Node* mpNode;
 		Connection* mpConnection;
 		int mCostSoFar;

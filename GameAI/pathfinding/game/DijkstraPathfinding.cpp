@@ -30,18 +30,21 @@ DijkstraPathfinding::~DijkstraPathfinding()
 
 Path* DijkstraPathfinding::findPath(Node* pFrom, Node* pTo)
 {
+	
 	gpPerformanceTracker->clearTracker("path");
 	gpPerformanceTracker->startTracking("path");
 	//allocate nodes to visit list and place starting node in it
 
-	NodeRecord* startRecord = new NodeRecord();
-	startRecord->mpNode = pFrom;
-	startRecord->mpConnection = NULL;
-	startRecord->mCostSoFar = 0;
+	NodeRecord startRecord;
+	startRecord.mpNode = pFrom;
+	startRecord.mpConnection = NULL;
+	startRecord.mCostSoFar = 0;
 
 
 	//list<Node*> nodesToVisit;
-	list<NodeRecord*> nodesToVisit;
+	list<NodeRecord> nodesToVisit;
+	list<NodeRecord> visitedNodes;
+
 	nodesToVisit.push_front(startRecord);
 
 #ifdef VISUALIZE_PATH
@@ -54,7 +57,7 @@ Path* DijkstraPathfinding::findPath(Node* pFrom, Node* pTo)
 	Path* pPath = new Path();
 
 	//Node* pCurrentNode = NULL;
-	NodeRecord* currentNode = new NodeRecord();
+	NodeRecord currentNode;
 	bool toNodeAdded = false;
 
 
@@ -62,70 +65,121 @@ Path* DijkstraPathfinding::findPath(Node* pFrom, Node* pTo)
 	{
 		//get current node from front of list
 		currentNode = nodesToVisit.front();
-
-		//if goal break from loop
-		/*if (pCurrentNode == pTo)
-		{
-			break;
-		}*/
-
+				
 		//remove node from list
 		nodesToVisit.pop_front();
-		//add Node to Path
-		pPath->addNode(currentNode->mpNode);
 
 		//get the Connections for the current node
-		vector<Connection*> connections = mpGraph->getConnections(currentNode->mpNode->getId());
+		vector<Connection*> connections = mpGraph->getConnections(currentNode.mpNode->getId());
 
 		//add all toNodes in the connections to the "toVisit" list, if they are not already in the list
+		
+
 		for (unsigned int i = 0; i < connections.size(); i++)
 		{
+			NodeRecord endNodeRecord = NodeRecord();
 			Connection* pConnection = connections[i];
 			Node* pEndNode = connections[i]->getToNode();
-			NodeRecord* endNodeRecord;
-			int endNodeCost = currentNode->mCostSoFar + connections[i]->getCost();
-			if (find(mVisitedNodes.begin(), mVisitedNodes.end(), endNode) == mVisitedNodes.end()) //Figure out how to find visited node record values with the node type
+			int endNodeCost = currentNode.mCostSoFar + connections[i]->getCost();
+			bool isVisited = false;
+			bool hasntVisited = false;
+
+
+			for (int i = 0; i < mVisitedNodes.size(); i++)
 			{
+				if (mVisitedNodes.at(i) == pEndNode)
+				{
+					isVisited = true;
+					break;
+				}
+			}
+
+			list<NodeRecord>::iterator iterLocation;
+			for (list<NodeRecord>::iterator iter = nodesToVisit.begin(); iter != nodesToVisit.end(); ++iter)
+			{
+
+				if (iter->mpNode == pEndNode)
+				{
+					iterLocation = iter;
+					hasntVisited = true;
+					break;
+				}
+			}
+
+
+			if (isVisited) //Figure out how to find visited node record values with the node type
+			{				
 				continue;
 			}
-			else if (find(nodesToVisit.begin(), nodesToVisit.end(), endNode) != nodesToVisit.end())
+			else if (hasntVisited)
 			{
-				list<NodeRecord*>::iterator iter = find(nodesToVisit.begin(), nodesToVisit.end(), endNode);
-				endNode = *iter;
-				if (endNodeRecord->mCostSoFar <= endNodeCost)
+				pEndNode = iterLocation->mpNode;
+				if (endNodeRecord.mCostSoFar <= endNodeCost)
 				{
 					continue;
 				}
-			}		//Look at pseudo code from book and figure the rest out
+			}		
 			else
 			{
-				endNodeRecord = new NodeRecord(endNode, pConnection, endNodeCost);
+				endNodeRecord = NodeRecord(pEndNode, pConnection, endNodeCost);
 			}
 
-			if (!toNodeAdded &&
-				!pPath->containsNode(pTempToNode) &&
-				find(nodesToVisit.begin(), nodesToVisit.end(), pTempToNode) == nodesToVisit.end())
+			
+			if (!isVisited && !toNodeAdded)
 			{
-				//nodesToVisit.push_front(pTempToNode);//uncomment me for depth-first search
-				nodesToVisit.push_back(pTempToNode);//uncomment me for breadth-first search
-				if (pTempToNode == pTo)
+ 				nodesToVisit.push_back(endNodeRecord);
+				if (endNodeRecord.mpNode == pTo)
 				{
 					toNodeAdded = true;
 				}
 #ifdef VISUALIZE_PATH
-				mVisitedNodes.push_back(pTempToNode);
+				mVisitedNodes.push_back(endNodeRecord.mpNode);
 #endif
-
+				visitedNodes.push_back(endNodeRecord);				
 			}
 		}
+		
+		for (list<NodeRecord>::iterator iter = nodesToVisit.begin(); iter != nodesToVisit.end(); iter++)
+		{
+			if (iter->mpNode == currentNode.mpNode)
+			{			
+				nodesToVisit.erase(iter);
+				break;
+			}
+		}
+#ifdef VISUALIZE_PATH
+		mVisitedNodes.push_back(currentNode.mpNode);
+#endif		
 	}
+	
 
-	gpPerformanceTracker->stopTracking("path");
-	mTimeElapsed = gpPerformanceTracker->getElapsedTime("path");
+		gpPerformanceTracker->stopTracking("path");
+		mTimeElapsed = gpPerformanceTracker->getElapsedTime("path");
+		if (currentNode.mpNode != pTo)
+		{
+			return NULL;
+		}		
+		{
+			while (currentNode.mpNode != pFrom)
+			{
+				pPath->addNode(currentNode.mpNode);
+				currentNode.mpNode = currentNode.mpConnection->getFromNode();
+
+				for (list<NodeRecord>::iterator iter = visitedNodes.begin(); iter != visitedNodes.end(); ++iter)
+				{
+					if (iter->mpNode == currentNode.mpNode)
+					{
+						currentNode.mpConnection = iter->mpConnection;
+						break;
+					}
+				}
+			}
+		}
 
 #ifdef VISUALIZE_PATH
-	mpPath = pPath;
+		mpPath = pPath;
 #endif
+		
 	return pPath;
 
 }
