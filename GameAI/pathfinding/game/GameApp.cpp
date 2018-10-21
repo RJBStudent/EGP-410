@@ -151,9 +151,13 @@ void GameApp::setAStar()
 
 	Node* pTo = mpPathfinder->getLastTo();
 	Node* pFrom = mpPathfinder->getLastFrom();
-	//delete mpPathfinder;
-	mpPathfinder = NULL;
+	delete mpPathfinder;
+	//mpPathfinder = NULL;
 	mpPathfinder = new AStarPathfinding(mpGridGraph);
+	PathfindingDebugContent* pContent = new PathfindingDebugContent(mpPathfinder);
+	delete mpDebugDisplay;
+	mpDebugDisplay = NULL;
+	mpDebugDisplay = new DebugDisplay(Vector2D(0, 12), pContent);
 	mpPathfinder->setLastFrom(pFrom);
 	mpPathfinder->setLastTo(pTo);
 }
@@ -163,9 +167,13 @@ void GameApp::setDijkstra()
 
 	Node* pTo = mpPathfinder->getLastTo();
 	Node* pFrom = mpPathfinder->getLastFrom();
-	//delete mpPathfinder;
-	mpPathfinder = NULL;
+	delete mpPathfinder;
+	//mpPathfinder = NULL;
 	mpPathfinder = new DijkstraPathfinding(mpGridGraph);
+	PathfindingDebugContent* pContent = new PathfindingDebugContent(mpPathfinder);
+	delete mpDebugDisplay;
+	mpDebugDisplay = NULL;
+	mpDebugDisplay = new DebugDisplay(Vector2D(0, 12), pContent);
 	mpPathfinder->setLastFrom(pFrom);
 	mpPathfinder->setLastTo(pTo);
 }
@@ -174,9 +182,13 @@ void GameApp::setDepthFirst()
 {
 	Node* pTo = mpPathfinder->getLastTo();
 	Node* pFrom = mpPathfinder->getLastFrom();
-	//delete mpPathfinder;
-	mpPathfinder = NULL;
+	delete mpPathfinder;
+	//mpPathfinder = NULL;
 	mpPathfinder = new DepthFirstPathfinder(mpGridGraph);
+	PathfindingDebugContent* pContent = new PathfindingDebugContent(mpPathfinder);
+	delete mpDebugDisplay;
+	mpDebugDisplay = NULL;
+	mpDebugDisplay = new DebugDisplay(Vector2D(0, 12), pContent);
 	mpPathfinder->setLastFrom(pFrom);
 	mpPathfinder->setLastTo(pTo);
 }
