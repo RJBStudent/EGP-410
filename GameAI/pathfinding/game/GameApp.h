@@ -43,6 +43,11 @@ public:
 	inline GridPathfinder* getPathfinder() { return mpPathfinder; };
 	inline Grid* getGrid() { return mpGrid; };
 	inline GridGraph* getGridGraph() { return mpGridGraph; };
+
+	//used for changing pathfinding types through messages
+	void setAStar();
+	void setDijkstra();
+	void setDepthFirst();
 private:
 	GameMessageManager* mpMessageManager;
 	Grid* mpGrid;

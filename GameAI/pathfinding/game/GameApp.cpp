@@ -66,7 +66,8 @@ bool GameApp::init()
 	mpGridGraph->init();
 
 	mpPathfinder = new AStarPathfinding(mpGridGraph);
-	
+	//mpPathfinder = new DijkstraPathfinding(mpGridGraph);
+
 	//load buffers
 	mpGraphicsBufferManager->loadBuffer(mBackgroundBufferID, "wallpaper.bmp");
 
@@ -143,4 +144,39 @@ void GameApp::processLoop()
 bool GameApp::endLoop()
 {
 	return Game::endLoop();
+}
+
+void GameApp::setAStar()
+{
+
+	Node* pTo = mpPathfinder->getLastTo();
+	Node* pFrom = mpPathfinder->getLastFrom();
+	//delete mpPathfinder;
+	mpPathfinder = NULL;
+	mpPathfinder = new AStarPathfinding(mpGridGraph);
+	mpPathfinder->setLastFrom(pFrom);
+	mpPathfinder->setLastTo(pTo);
+}
+
+void GameApp::setDijkstra()
+{
+
+	Node* pTo = mpPathfinder->getLastTo();
+	Node* pFrom = mpPathfinder->getLastFrom();
+	//delete mpPathfinder;
+	mpPathfinder = NULL;
+	mpPathfinder = new DijkstraPathfinding(mpGridGraph);
+	mpPathfinder->setLastFrom(pFrom);
+	mpPathfinder->setLastTo(pTo);
+}
+
+void GameApp::setDepthFirst()
+{
+	Node* pTo = mpPathfinder->getLastTo();
+	Node* pFrom = mpPathfinder->getLastFrom();
+	//delete mpPathfinder;
+	mpPathfinder = NULL;
+	mpPathfinder = new DepthFirstPathfinder(mpGridGraph);
+	mpPathfinder->setLastFrom(pFrom);
+	mpPathfinder->setLastTo(pTo);
 }

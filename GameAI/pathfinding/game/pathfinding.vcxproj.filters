@@ -123,6 +123,15 @@
     <ClInclude Include="CloseMessage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DepthFirstSearchMessage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DijkstraPathfindingMessage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AStarPathfindingMessage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\common\Game.cpp">
@@ -213,6 +222,15 @@
       <Filter>Common\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CloseMessage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DepthFirstSearchMessage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DijkstraPathfindingMessage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AStarPathfindingMessage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -5,6 +5,9 @@
 #include "CloseMessage.h"
 #include "PathToMessage.h"
 #include "GameApp.h"
+#include "AStarPathfindingMessage.h"
+#include "DijkstraPathfindingMessage.h"
+#include "DepthFirstSearchMessage.h"
 
 InputSystem::InputSystem()
 {
@@ -38,22 +41,44 @@ void InputSystem::update()
 	keyInputUpdate();
 	GameApp* pGame = dynamic_cast<GameApp*>(gpGame);
 	mouseInputUpdate();
+
+	
+
+	
+
 	//int x, y;
 	for (int i = 0; i < static_cast<int>(KeyCode::NUM_SCANCODES); i++)
 	{
 		if (mBitwiseKeyStates[i] || 0x0)
 		{
-			 if(i == static_cast<int>(KeyCode::SCANCODE_ESCAPE) && getHasByte(mBitwiseKeyStates[i], StateBitValues::CURRENTLY_PRESSED))
+			if (i == static_cast<int>(KeyCode::SCANCODE_ESCAPE) && getHasByte(mBitwiseKeyStates[i], StateBitValues::CURRENTLY_PRESSED))
 			{
-			GameMessage* pMessage = new CloseMessage();
-			pGame->getMessageManager()->addMessage(pMessage, 0);
+				GameMessage* pMessage = new CloseMessage();
+				pGame->getMessageManager()->addMessage(pMessage, 0);
+			}
+			else if (i == static_cast<int>(KeyCode::SCANCODE_F) && getHasByte(mBitwiseKeyStates[i], StateBitValues::CURRENTLY_PRESSED))
+			{
+				GameMessage* pMessage = new DepthFirstSearchMessage();
+				pGame->getMessageManager()->addMessage(pMessage, 0);
+			}
+			else if (i == static_cast<int>(KeyCode::SCANCODE_D) && getHasByte(mBitwiseKeyStates[i], StateBitValues::CURRENTLY_PRESSED))
+			{
+				GameMessage* pMessage = new DijkstraPathfindingMessage();
+				pGame->getMessageManager()->addMessage(pMessage, 0);
+			}
+			else if (i == static_cast<int>(KeyCode::SCANCODE_A) && getHasByte(mBitwiseKeyStates[i], StateBitValues::CURRENTLY_PRESSED))
+			{
+				GameMessage* pMessage = new AStarPathfindingMessage();
+				pGame->getMessageManager()->addMessage(pMessage, 0);
 			}
 		}
 
 	}
+	static Vector2D lastPos(0.0f, 0.0f);
+
+	
 	if (getHasByte(mLeftMouse, StateBitValues::CURRENTLY_PRESSED))
 	{
-		static Vector2D lastPos(0.0f, 0.0f);
 		Vector2D pos(mMouseLocation.getX(), mMouseLocation.getY());
 		if (lastPos.getX() != pos.getX() || lastPos.getY() != pos.getY())
 		{
@@ -80,7 +105,7 @@ void InputSystem::mouseInputUpdate()
 	mRightMouse &= ~StateBitValues::JUST_PRESSED;
 
 	mRightMouse &= ~StateBitValues::JUST_RELEASED;
-	
+
 	//Loop through all recorded mouse events
 
 	int x, y;
@@ -89,7 +114,7 @@ void InputSystem::mouseInputUpdate()
 
 	if (SDL_GetMouseState(&x, &y) & SDL_BUTTON(SDL_BUTTON_LEFT))
 	{
-		BYTE* whichButton = &mLeftMouse;		
+		BYTE* whichButton = &mLeftMouse;
 		mLeftMouse |= StateBitValues::JUST_PRESSED;
 		mLeftMouse |= StateBitValues::CURRENTLY_PRESSED;
 
@@ -108,7 +133,7 @@ void InputSystem::mouseInputUpdate()
 		mRightMouse |= StateBitValues::JUST_PRESSED;
 		mRightMouse |= StateBitValues::CURRENTLY_PRESSED;
 	}
-	else if(!SDL_GetMouseState(&x, &y) & SDL_BUTTON(SDL_BUTTON_RIGHT))
+	else if (!SDL_GetMouseState(&x, &y) & SDL_BUTTON(SDL_BUTTON_RIGHT))
 	{
 		BYTE* whichButton = &mRightMouse;
 		mRightMouse &= ~StateBitValues::CURRENTLY_PRESSED;

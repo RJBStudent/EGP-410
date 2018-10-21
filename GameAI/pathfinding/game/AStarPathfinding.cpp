@@ -33,6 +33,9 @@ AStarPathfinding::~AStarPathfinding()
 
 Path* AStarPathfinding::findPath(Node* pFrom, Node* pTo)
 {
+	mpLastFrom = pFrom;
+	mpLastTo = pTo;
+
 	gpPerformanceTracker->clearTracker("path");
 	gpPerformanceTracker->startTracking("path");
 	//allocate nodes to visit list and place starting node in it
@@ -68,12 +71,15 @@ Path* AStarPathfinding::findPath(Node* pFrom, Node* pTo)
 
 		currentNode = getSmallestElement(nodesToVisit);	//Get shortest node in open list
 
+		//pPath->addNode(currentNode.mpNode);
+
 		//remove node from list
 		if (currentNode.mpNode == pTo)
 		{
 			break;
 		}
 		nodesToVisit.pop_front();
+
 
 		//get the Connections for the current node
 		vector<Connection*> connections = mpGraph->getConnections(currentNode.mpNode->getId());
@@ -154,14 +160,16 @@ Path* AStarPathfinding::findPath(Node* pFrom, Node* pTo)
 			}
 			else
 			{
+				endNodeRecord = NodeRecord();
 				endNodeRecord.mpNode = pEndNode;
 				endNodeHeuristic = getHeuristic(pEndNode, pTo);
+				
 			}
 			endNodeRecord.mCostSoFar = endNodeCost;
 			endNodeRecord.mpConnection = pConnection;
 			endNodeRecord.mEstimateCost = endNodeCost + endNodeHeuristic;
 
-			if (!isVisited && !toNodeAdded)
+			if (!hasntVisited && !toNodeAdded)
 			{
 				nodesToVisit.push_back(endNodeRecord);
 				if (endNodeRecord.mpNode == pTo)
@@ -186,16 +194,18 @@ Path* AStarPathfinding::findPath(Node* pFrom, Node* pTo)
 #ifdef VISUALIZE_PATH
 		mVisitedNodes.push_back(currentNode.mpNode);
 #endif		
+		visitedNodes.push_back(currentNode);
 	}
 
 
 	gpPerformanceTracker->stopTracking("path");
 	mTimeElapsed = gpPerformanceTracker->getElapsedTime("path");
+	
 	if (currentNode.mpNode != pTo)
 	{
 		return NULL;
 	}
-	{
+	else{
 		while (currentNode.mpNode != pFrom)
 		{
 			pPath->addNode(currentNode.mpNode);

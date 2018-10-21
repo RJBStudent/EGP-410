@@ -30,6 +30,8 @@ DijkstraPathfinding::~DijkstraPathfinding()
 
 Path* DijkstraPathfinding::findPath(Node* pFrom, Node* pTo)
 {
+	mpLastFrom = pFrom;
+	mpLastTo = pTo;
 	
 	gpPerformanceTracker->clearTracker("path");
 	gpPerformanceTracker->startTracking("path");
@@ -66,6 +68,10 @@ Path* DijkstraPathfinding::findPath(Node* pFrom, Node* pTo)
 		//get current node from front of list
 		currentNode = nodesToVisit.front();
 				
+		if (currentNode.mpNode == pTo)
+		{
+			break;
+		}
 		//remove node from list
 		nodesToVisit.pop_front();
 
@@ -125,7 +131,7 @@ Path* DijkstraPathfinding::findPath(Node* pFrom, Node* pTo)
 			}
 
 			
-			if (!isVisited && !toNodeAdded)
+			if (!hasntVisited && !toNodeAdded)
 			{
  				nodesToVisit.push_back(endNodeRecord);
 				if (endNodeRecord.mpNode == pTo)
@@ -150,6 +156,7 @@ Path* DijkstraPathfinding::findPath(Node* pFrom, Node* pTo)
 #ifdef VISUALIZE_PATH
 		mVisitedNodes.push_back(currentNode.mpNode);
 #endif		
+		visitedNodes.push_back(currentNode);
 	}
 	
 
@@ -159,7 +166,7 @@ Path* DijkstraPathfinding::findPath(Node* pFrom, Node* pTo)
 		{
 			return NULL;
 		}		
-		{
+		else{
 			while (currentNode.mpNode != pFrom)
 			{
 				pPath->addNode(currentNode.mpNode);
