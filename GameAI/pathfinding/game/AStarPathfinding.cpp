@@ -147,7 +147,8 @@ Path* AStarPathfinding::findPath(Node* pFrom, Node* pTo)
 				visitedNodes.erase(closedLocation);
 
 				//set a float that is enNodeHeuristic to the endNodeRecord cost from the cost so far
-				endNodeHeuristic = endNodeRecord.mpConnection->getCost() - endNodeRecord.mCostSoFar;
+				//endNodeHeuristic = endNodeRecord.mCostSoFar - endNodeRecord.mCostSoFar;
+				endNodeHeuristic = getHeuristic(pEndNode, pTo);
 			}
 			else if (hasntVisited)
 			{
@@ -156,7 +157,8 @@ Path* AStarPathfinding::findPath(Node* pFrom, Node* pTo)
 				{
 					continue;
 				}
-				endNodeHeuristic = endNodeRecord.mpConnection->getCost() - endNodeRecord.mCostSoFar;
+				//endNodeHeuristic = endNodeRecord.mCostSoFar - endNodeRecord.mCostSoFar;
+				endNodeHeuristic = getHeuristic(pEndNode, pTo);
 			}
 			else
 			{
