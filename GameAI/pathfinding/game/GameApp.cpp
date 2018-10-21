@@ -20,6 +20,7 @@
 #include "DebugDisplay.h"
 #include "PathfindingDebugContent.h"
 #include "InputSystem.h"
+#include "AStarPathfinding.h"
 
 #include <SDL.h>
 #include <fstream>
@@ -64,7 +65,7 @@ bool GameApp::init()
 	//init the nodes and connections
 	mpGridGraph->init();
 
-	mpPathfinder = new DijkstraPathfinding(mpGridGraph);
+	mpPathfinder = new AStarPathfinding(mpGridGraph);
 	
 	//load buffers
 	mpGraphicsBufferManager->loadBuffer(mBackgroundBufferID, "wallpaper.bmp");
