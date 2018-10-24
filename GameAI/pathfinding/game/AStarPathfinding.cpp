@@ -36,6 +36,11 @@ Path* AStarPathfinding::findPath(Node* pFrom, Node* pTo)
 	mpLastFrom = pFrom;
 	mpLastTo = pTo;
 
+	if (!mpLastFrom || !mpLastTo)
+	{
+		return NULL;
+	}
+
 	gpPerformanceTracker->clearTracker("path");
 	gpPerformanceTracker->startTracking("path");
 	//allocate nodes to visit list and place starting node in it
@@ -46,7 +51,6 @@ Path* AStarPathfinding::findPath(Node* pFrom, Node* pTo)
 	startRecord.mCostSoFar = 0;
 	startRecord.mEstimateCost = getHeuristic(pFrom, pTo);
 
-	//list<Node*> nodesToVisit;
 	list<NodeRecord> nodesToVisit;
 	list<NodeRecord> visitedNodes;
 
@@ -61,7 +65,6 @@ Path* AStarPathfinding::findPath(Node* pFrom, Node* pTo)
 	//create Path
 	Path* pPath = new Path();
 
-	//Node* pCurrentNode = NULL;
 	NodeRecord currentNode;
 	bool toNodeAdded = false;
 
@@ -71,7 +74,6 @@ Path* AStarPathfinding::findPath(Node* pFrom, Node* pTo)
 
 		currentNode = getSmallestElement(nodesToVisit);	//Get shortest node in open list
 
-		//pPath->addNode(currentNode.mpNode);
 
 		//remove node from list
 		if (currentNode.mpNode == pTo)
@@ -84,7 +86,6 @@ Path* AStarPathfinding::findPath(Node* pFrom, Node* pTo)
 		//get the Connections for the current node
 		vector<Connection*> connections = mpGraph->getConnections(currentNode.mpNode->getId());
 
-		//add all toNodes in the connections to the "toVisit" list, if they are not already in the list
 
 
 		for (unsigned int i = 0; i < connections.size(); i++)
@@ -92,11 +93,12 @@ Path* AStarPathfinding::findPath(Node* pFrom, Node* pTo)
 			NodeRecord endNodeRecord = NodeRecord();
 			Connection* pConnection = connections[i];
 			Node* pEndNode = connections[i]->getToNode();
-			int endNodeCost = currentNode.mCostSoFar + connections[i]->getCost();
+			float endNodeCost = currentNode.mCostSoFar + connections[i]->getCost() +getHeuristic(pEndNode, pTo);
 			bool isVisited = false;
 			bool hasntVisited = false;
-			float endNodeHeuristic = 0;
+			float endNodeHeuristic = getHeuristic(pEndNode, pTo);
 
+			//Find out if the current node has been visited in the Member data of visited nodes
 			bool isVisitedMember = false;
 			vector<Node*>::iterator visitedMemberLocation;
 			for (visitedMemberLocation = mVisitedNodes.begin(); visitedMemberLocation != mVisitedNodes.end(); ++visitedMemberLocation)
@@ -108,6 +110,7 @@ Path* AStarPathfinding::findPath(Node* pFrom, Node* pTo)
 				}
 			}
 			
+			//Find out if the current has been found in the Node Record
 			list<NodeRecord>::iterator closedLocation;
 			for (closedLocation = visitedNodes.begin(); closedLocation != visitedNodes.end(); ++closedLocation)
 			{
@@ -118,6 +121,7 @@ Path* AStarPathfinding::findPath(Node* pFrom, Node* pTo)
 				}
 			}
 
+			//Find out if the Node is in the open list
 			list<NodeRecord>::iterator iterLocation;
 			for (list<NodeRecord>::iterator iter = nodesToVisit.begin(); iter != nodesToVisit.end(); ++iter)
 			{
@@ -130,8 +134,8 @@ Path* AStarPathfinding::findPath(Node* pFrom, Node* pTo)
 				}
 			}
 
-
-			if (isVisited) //Figure out how to find visited node record values with the node type
+			//If it has been in the closed list take it out and check the cost with the current node.
+			if (isVisited) 
 			{
 				//Find where end node is in Visited and set it to endNodeRecord
 				endNodeRecord = (*closedLocation);
@@ -146,31 +150,32 @@ Path* AStarPathfinding::findPath(Node* pFrom, Node* pTo)
 				mVisitedNodes.erase(visitedMemberLocation);
 				visitedNodes.erase(closedLocation);
 
-				//set a float that is enNodeHeuristic to the endNodeRecord cost from the cost so far
-				//endNodeHeuristic = endNodeRecord.mCostSoFar - endNodeRecord.mCostSoFar;
+				//set a float that is enNodeHeuristic to a new heuristic
 				endNodeHeuristic = getHeuristic(pEndNode, pTo);
 			}
-			else if (hasntVisited)
+			else if (hasntVisited)	//if the current node is in the open list set the new NodeRecord to that and set the hueristic from it to the end
 			{
 				endNodeRecord = (*iterLocation);
 				if (endNodeRecord.mCostSoFar <= endNodeCost)
 				{
 					continue;
 				}
-				//endNodeHeuristic = endNodeRecord.mCostSoFar - endNodeRecord.mCostSoFar;
 				endNodeHeuristic = getHeuristic(pEndNode, pTo);
 			}
-			else
+			else //create a new node record with the current connection node as the node.
 			{
 				endNodeRecord = NodeRecord();
 				endNodeRecord.mpNode = pEndNode;
 				endNodeHeuristic = getHeuristic(pEndNode, pTo);
 				
 			}
+
+			//Set the leftover data to what it was set to in the if statements.
 			endNodeRecord.mCostSoFar = endNodeCost;
 			endNodeRecord.mpConnection = pConnection;
 			endNodeRecord.mEstimateCost = endNodeCost + endNodeHeuristic;
 
+			//if it wasn't in the closed list or open list, add it to the open lost and check if it is the end
 			if (!hasntVisited && !toNodeAdded)
 			{
 				nodesToVisit.push_back(endNodeRecord);
@@ -178,6 +183,7 @@ Path* AStarPathfinding::findPath(Node* pFrom, Node* pTo)
 				{
 					toNodeAdded = true;
 				}
+				//Also add it to the closed list
 #ifdef VISUALIZE_PATH
 				mVisitedNodes.push_back(endNodeRecord.mpNode);
 #endif
@@ -185,6 +191,7 @@ Path* AStarPathfinding::findPath(Node* pFrom, Node* pTo)
 			}
 		}
 
+		//remove the current node from the open list.
 		for (list<NodeRecord>::iterator iter = nodesToVisit.begin(); iter != nodesToVisit.end(); ++iter)
 		{
 			if (iter->mpNode == currentNode.mpNode)
@@ -193,6 +200,8 @@ Path* AStarPathfinding::findPath(Node* pFrom, Node* pTo)
 				break;
 			}
 		}
+
+		//Add the current node to the closed list.
 #ifdef VISUALIZE_PATH
 		mVisitedNodes.push_back(currentNode.mpNode);
 #endif		
@@ -203,6 +212,7 @@ Path* AStarPathfinding::findPath(Node* pFrom, Node* pTo)
 	gpPerformanceTracker->stopTracking("path");
 	mTimeElapsed = gpPerformanceTracker->getElapsedTime("path");
 	
+	//Return the path from the visited nodes.
 	if (currentNode.mpNode != pTo)
 	{
 		return NULL;

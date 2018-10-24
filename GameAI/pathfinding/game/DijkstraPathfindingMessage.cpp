@@ -18,6 +18,7 @@ void DijkstraPathfindingMessage::process()
 	if (pGame != NULL)
 	{
 		pGame->setDijkstra();
+
 		pGame->getPathfinder()->findPath(pGame->getPathfinder()->getLastFrom(), pGame->getPathfinder()->getLastTo());
 	}
 }

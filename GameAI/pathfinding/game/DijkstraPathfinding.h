@@ -2,15 +2,16 @@
 
 #include "GridPathfinder.h"
 #include <vector>
+#include <list>
 
 
 class Path;
 class Graph;
 class GraphicsBuffer;
 class Grid;
-class Connection;//might need to be commented out
+class Connection;
 
-
+//Gridfinder class that calculates the path using Dijkstra. Node Record struct contains a node, connection, and cost.
 class DijkstraPathfinding :public GridPathfinder
 {
 public:
@@ -30,8 +31,10 @@ private:
 		}
 		Node* mpNode;
 		Connection* mpConnection;
-		int mCostSoFar;
+		float mCostSoFar;
 	};
+
+	NodeRecord getSmallestElement(std::list<NodeRecord> openList);
 };
 
 

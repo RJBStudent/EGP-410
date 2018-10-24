@@ -66,7 +66,6 @@ bool GameApp::init()
 	mpGridGraph->init();
 
 	mpPathfinder = new AStarPathfinding(mpGridGraph);
-	//mpPathfinder = new DijkstraPathfinding(mpGridGraph);
 
 	//load buffers
 	mpGraphicsBufferManager->loadBuffer(mBackgroundBufferID, "wallpaper.bmp");
@@ -133,8 +132,7 @@ void GameApp::processLoop()
 
 	mpMessageManager->processMessagesForThisframe();
 
-	//get input - should be moved someplace better
-
+	//get input
 	mpInputSystem->update();
 
 	//should be last thing in processLoop
@@ -146,13 +144,13 @@ bool GameApp::endLoop()
 	return Game::endLoop();
 }
 
+
+//These functions are used in the message system to switch the pathfinding type.
 void GameApp::setAStar()
 {
-
 	Node* pTo = mpPathfinder->getLastTo();
 	Node* pFrom = mpPathfinder->getLastFrom();
 	delete mpPathfinder;
-	//mpPathfinder = NULL;
 	mpPathfinder = new AStarPathfinding(mpGridGraph);
 	PathfindingDebugContent* pContent = new PathfindingDebugContent(mpPathfinder);
 	delete mpDebugDisplay;
@@ -164,11 +162,9 @@ void GameApp::setAStar()
 
 void GameApp::setDijkstra()
 {
-
 	Node* pTo = mpPathfinder->getLastTo();
 	Node* pFrom = mpPathfinder->getLastFrom();
 	delete mpPathfinder;
-	//mpPathfinder = NULL;
 	mpPathfinder = new DijkstraPathfinding(mpGridGraph);
 	PathfindingDebugContent* pContent = new PathfindingDebugContent(mpPathfinder);
 	delete mpDebugDisplay;
@@ -183,7 +179,6 @@ void GameApp::setDepthFirst()
 	Node* pTo = mpPathfinder->getLastTo();
 	Node* pFrom = mpPathfinder->getLastFrom();
 	delete mpPathfinder;
-	//mpPathfinder = NULL;
 	mpPathfinder = new DepthFirstPathfinder(mpGridGraph);
 	PathfindingDebugContent* pContent = new PathfindingDebugContent(mpPathfinder);
 	delete mpDebugDisplay;

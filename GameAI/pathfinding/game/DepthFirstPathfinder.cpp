@@ -31,6 +31,11 @@ Path* DepthFirstPathfinder::findPath( Node* pFrom, Node* pTo )
 	mpLastFrom = pFrom;
 	mpLastTo = pTo;
 
+	if (!mpLastFrom || !mpLastTo)
+	{
+		return NULL;
+	}
+
 	gpPerformanceTracker->clearTracker("path");
 	gpPerformanceTracker->startTracking("path");
 	//allocate nodes to visit list and place starting node in it

@@ -10,6 +10,11 @@ class GraphicsBuffer;
 class Grid;
 class Connection;
 
+
+/*
+A* Pathfinding similar to Dijkstra class except the Node Record Struct has another float used for the heuristic.
+The heuristic is the difference between the from node to the target node.
+*/
 class AStarPathfinding :public GridPathfinder
 {
 public:
@@ -31,7 +36,7 @@ private:
 		}
 		Node* mpNode;
 		Connection* mpConnection;
-		int mCostSoFar;
+		float mCostSoFar;
 		float mEstimateCost;
 	};
 
